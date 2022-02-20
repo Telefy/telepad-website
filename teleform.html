@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+
+  <title>Telefyform</title>
+  <meta content="" name="description" />
+  <meta content="" name="keywords" />
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon" />
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon" />
+
+  <!-- Google Fonts -->
+  <!-- <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Roboto:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+      rel="stylesheet"
+    /> -->
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/aos/aos.css" rel="stylesheet" />
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet" />
+  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet" />
+  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet" />
+  <link href="./assets/css/sweetalert-dark.css" rel="stylesheet" />
+
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet" />
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
+
+</head>
+
+<body>
+  <!-- ======= Header ======= -->
+  <header id="header" class="fixed-top">
+    <div class="container d-flex align-items-center justify-content-between">
+      <h1 class="logo">
+        <a href="index.html">
+          <img src="./assets/img/telefy-dark1.svg" width="200" />
+        </a>
+      </h1>
+      <!-- Uncomment below if you prefer to use an image logo -->
+      <!-- <a href="index.html" class="logo"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li>
+            <a class="nav-link scrollto" href="index.html">Home</a>
+          </li>
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav>
+      <!-- .navbar -->
+    </div>
+  </header>
+  <!-- End Header -->
+
+  <main id="main">
+    <!-- ======= Breadcrumbs ======= -->
+    <section id="breadcrumbs" class="breadcrumbs">
+      <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+          <h2>Telefy Form</h2>
+          <div class="account-info" id="accountInfo">
+            <div class="network" id="chainId"></div>
+            <!-- <div>0.07026 ETH</div> -->
+            <div class="w-address" id="accountId"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- End Breadcrumbs -->
+
+    <!-- =======  Section ======= -->
+    <section id="portfolio-details" class="portfolio-details">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="mb-3 text-center">
+              <a href="#about" class="custom-btn" id="checkMetaInstall"><i class="bi bi-wallet2"></i> Connect to a
+                wallet</a>
+            </div>
+          </div>
+        </div>
+        <div class="row gy-4">
+          <div class="col-lg-6 offset-lg-3">
+            <!-- ======= Tele Form Section ======= -->
+            <section id="contact" class="contact section-bg">
+              <div class="container" data-aos="fade-up">
+                <div class="section-title">
+                  <h2>Fill the details</h2>
+                  <p class="error-msg" id="connectBuynow" style="font-size: larger;"></p>
+                  <p class="error-msg" id="connectNetwork" style="font-size: larger;"></p>
+                </div>
+
+                <form id="presale-form" action="" class="php-email-form" method="post">
+                  <div class="row">
+                    <div class="col-md-6 form-group mt-3 mt-md-0">
+                      <label>Email</label>
+                      <input type="email" class="form-control" name="email" id="email" placeholder="Your Email"
+                        required />
+                    </div>
+                    <div class="col-md-6 mt-xs-1 form-group">
+                      <label>Username</label>
+                      <input type="text" name="tusername" class="form-control" id="tusername"
+                        placeholder="Telegram User Name" required />
+                    </div>
+                  </div>
+                  <div class="form-group mt-3">
+                    <label>Wallet Address</label>
+                    <input type="text" class="form-control" name="waddress" id="waddress" placeholder="Wallet Address"
+                      required />
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-6 form-group mt-3 mt-md-0">
+                      <label>Tokens</label>
+                      <select class="form-control" name="tokenCoin" id="tokenCoin" placeholder="Slect Token to Buy"
+                        required>
+                        <option value="">--Select token to buy--</option>
+                        <option value="WETH">WETH</option>
+                        <option value="USDC">USDC</option>
+                        <option value="DAI">DAI</option>
+                      </select>
+                    </div>
+
+                    <div class="col-md-6 form-group mt-3 mt-md-0">
+                      <label>Token Value</label>
+                      <input type="text" class="form-control" name="tvalue" id="tvalue" placeholder="Token Value"
+                        required />
+                    </div>
+                  </div>
+                  <div class="text-center mt-3">
+                    <button type="submit" id="buynow">
+                      Buy Now
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </section>
+            <!-- End Tele Form Section -->
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- End Section -->
+  </main>
+  <!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+    <div class="footer-top">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-4 col-md-6 footer-contact">
+            <h1 class="logo">
+              <a href="index.html">
+                <img src="./assets/img/telefy-dark1.svg" width="100" />
+              </a>
+            </h1>
+            <p>
+              Worlds first credit score<br />
+              oriented multi chain <br />DEFI solution<br /><br />
+              <strong>Email:</strong> info@telefy.finance<br />
+            </p>
+          </div>
+
+          <div class="col-lg-4 col-md-6 footer-links">
+            <h4>Shortcut</h4>
+            <ul>
+              <li>
+                <i class="bx bx-chevron-right"></i> <a href="#home">Home</a>
+              </li>
+              <li>
+                <i class="bx bx-chevron-right"></i>
+                <a href="#about">About us</a>
+              </li>
+              <li>
+                <i class="bx bx-chevron-right"></i>
+                <a href="#features">Features</a>
+              </li>
+              <li>
+                <i class="bx bx-chevron-right"></i>
+                <a href="#roadmap">Road Map</a>
+              </li>
+              <li>
+                <i class="bx bx-chevron-right"></i>
+                <a href="#">Privacy policy</a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="col-lg-4 col-md-6 footer-links">
+            <h4>TeleFy Features</h4>
+            <ul>
+              <li>
+                <i class="bx bx-chevron-right"></i> <a href="#">Tele Swap</a>
+              </li>
+              <li>
+                <i class="bx bx-chevron-right"></i>
+                <a href="#">Tele Lend</a>
+              </li>
+              <li>
+                <i class="bx bx-chevron-right"></i>
+                <a href="#">Tele Score</a>
+              </li>
+              <li>
+                <i class="bx bx-chevron-right"></i> <a href="#">Tele Pad</a>
+              </li>
+              <li>
+                <i class="bx bx-chevron-right"></i>
+                <a href="#">Tele NFT</a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- <div class="col-lg-4 col-md-6 footer-newsletter">
+              <h4>Join Our Newsletter</h4>
+              <p>
+                Tamen quem nulla quae legam multos aute sint culpa legam noster
+                magna
+              </p>
+              <form action="" method="post">
+                <input type="email" name="email" /><input
+                  type="submit"
+                  value="Subscribe"
+                />
+              </form>
+            </div> -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="copyright-wrap d-md-flex py-4">
+        <div class="me-md-auto text-center text-md-start">
+          <div class="copyright">
+            &copy; 2022 <strong><span>Telefy.finance</span></strong>. All Rights Reserved
+          </div>
+          <div class="credits">
+            Powered by
+            <a target="_blank" href="https://telefy.finance/">Telefy</a>
+          </div>
+        </div>
+        <div class="social-links text-center text-md-right pt-3 pt-md-0">
+          <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
+          <a href="#" class="facebook"><i class="bx bxl-github"></i></a>
+          <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
+          <a href="#" class="google-plus"><i class="bx bxl-telegram"></i></a>
+          <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!-- End Footer -->
+
+  <!-- Wallet Modal -->
+  <div class="modal fade" id="walletModal" tabindex="-1" aria-labelledby="walletModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="walletModalLabel">
+            Connect to a wallet
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="card">
+            <div class="card-body" id="changeMeta">
+              Metamask
+              <img class="wallet-logo" src="./assets/img/meta.png" />
+            </div>
+          </div>
+        </div>
+        <!-- <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div> -->
+      </div>
+    </div>
+  </div>
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+      class="bi bi-arrow-up-short"></i></a>
+  <div id="preloader"></div>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/purecounter/purecounter.js"></script>
+  <script src="assets/vendor/aos/aos.js"></script>
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <!-- <script src="assets/vendor/php-email-form/validate.js"></script> -->
+  <script src="assets/js/sweetalert2.min.js"></script>
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+
+
+  <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
+  <script src="index.js"></script>
+  <script src="node_modules/@metamask/onboarding/dist/metamask-onboarding.bundle.js" defer></script>
+  <script>
+    function successTransaction(e) {
+      Swal.fire(
+        "Transaction Submitted Successfully!",
+        "You are being redirected to Telefy Home",
+        "success"
+      );
+    }
+
+    function failedTransaction(e) {
+      Swal.fire(
+        "Oops...Transaction failed!",
+        "Something went wrong!",
+        "error"
+      );
+    }
+
+
+   
+  </script>
+</body>
+
+</html>
