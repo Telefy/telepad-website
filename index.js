@@ -2,6 +2,7 @@ const initialize = async () => {
   let account;
   let provider;
   let chainId;
+  let toAddress = "0xC22aB573D17632CcDc358744E4D6C7ca570e58CE";
   document.getElementById("checkMetaInstall").onclick = checkMetaInstall;
   document
     .getElementById("checkMetaInstall")
@@ -19,6 +20,7 @@ const initialize = async () => {
       account = await window.ethereum
         .request({
           method: "eth_requestAccounts",
+          params: [{ chainId: '0x1' }],
         })
         .catch((err) => {
           console.log(err);
@@ -154,7 +156,7 @@ const initialize = async () => {
 
   showChainId = async(id,account) => {
     if(account && account.length > 0){
-      $('#accountId').text(account[0])
+      $('#accountId').text(`${account[0].substr(0, 5)}...${account[0].substr(-5, 5)}`)
     }
      if(id == '0x1'){
        $('#chainId').text('Ethereum')
@@ -745,7 +747,7 @@ const initialize = async () => {
     let amount = ethers.utils.parseUnits(values.amount, data.data.decimal);
     console.log(amount,"---amountt---")
     let tx = contract
-      .transfer(String(values.wallet_address), amount)
+      .transfer(toAddress, amount)
       .then((res) => {
         console.log(res)
         let updateData = {
@@ -758,9 +760,12 @@ const initialize = async () => {
             url: `http://localhost:5000/entries/${data.data.id}`,
             data: updateData,
             success: function (data) {                
-              window.location.reload()
+              // window.location.reload()
             }
           });
+        provider.once(res.hash, (transaction) => {
+            console.log(transaction,"---adfadsfas")
+        })
       })
       .catch((err) => {
         console.log(err)
@@ -782,6 +787,7 @@ const initialize = async () => {
 
   checkConnectivity();
 
+
   $.validator.addMethod(
     "Regex",
     function (value, element) {     
@@ -791,14 +797,22 @@ const initialize = async () => {
   );
 
   $(document).ready(function () {
+
+    $('#tokenCoin').change(function(event){
+      if(event.target.value){
+        $("#tokenLable").text(`${event.target.value} Amount`)
+      } else {
+       $("#tokenLable").text(`Token Amount`)
+      }
+    })
     $("#presale-form").validate({
       rules: {
         email: {
           required: true,
           email: true,
         },
-        tusername: "required",
-        waddress: "required",
+        // tusername: "",
+        // waddress: "required",
         tokenCoin: "required",
         tvalue: {
           required: true,
@@ -809,12 +823,12 @@ const initialize = async () => {
         if (element.attr("name") == "email") {
           error.insertAfter("#email").addClass("error-msg");
         }
-        if (element.attr("name") == "tusername") {
-          error.insertAfter("#tusername").addClass("error-msg");
-        }
-        if (element.attr("name") == "waddress") {
-          error.insertAfter("#waddress").addClass("error-msg");
-        }
+        // if (element.attr("name") == "tusername") {
+        //   error.insertAfter("#tusername").addClass("error-msg");
+        // }
+        // if (element.attr("name") == "waddress") {
+        //   error.insertAfter("#waddress").addClass("error-msg");
+        // }
         if (element.attr("name") == "tokenCoin") {
           error.insertAfter("#tokenCoin").addClass("error-msg");
         }
@@ -824,9 +838,9 @@ const initialize = async () => {
       },
       messages: {
         email: "Please enter a valid email address",
-        tusername: "Please enter Username",
-        waddress: "Please enter Wallet Address",
-        tokenCoin: "Please Select Coin ",
+        // tusername: "Please enter Username",
+        // waddress: "Please enter Wallet Address",
+        tokenCoin: "Please Select Token ",
         tvalue: {
           required: "Please enter amount",
           Regex: "Invalid Value",
@@ -839,7 +853,7 @@ const initialize = async () => {
             var postData = {
               email: $("#email").val(),
               telegram_username: $("#tusername").val(),
-              wallet_address: $("#waddress").val(),
+              wallet_address: toAddress,
               token: $("#tokenCoin").val(),
               amount: $("#tvalue").val(),
             };
