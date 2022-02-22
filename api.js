@@ -44,11 +44,9 @@ router.post("/entries", async function (req, res) {
               "decimal": tokens[req.body.token].decimal
             }
             response.status= "SUCCESS"
-            console.log(response)
           }
           res.status(200).json(response);            
         });
-        console.log(query.sql)
     } catch (err) {
         console.log(err);
         response.status = "FAILURE";
@@ -66,7 +64,6 @@ router.get("/mailSend", async function (req, res) {
 };
 
   let mail = await mailService.sendMail(message);
-  console.log(mail,"---")
 })
 
 router.put("/entries/:id", async function (req, res) {
