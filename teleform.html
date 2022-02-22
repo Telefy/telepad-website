@@ -70,7 +70,7 @@
           <div class="account-info" id="accountInfo">
             <div class="network" id="chainId"></div>
             <!-- <div>0.07026 ETH</div> -->
-            <div class="w-address" id="accountId"></div>
+            <div class="w-address" id="accountId" onclick="failedTransaction()"></div>
           </div>
         </div>
       </div>
@@ -310,22 +310,24 @@
 
 
   <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
-  <script src="index.js"></script>
-  <script src="node_modules/@metamask/onboarding/dist/metamask-onboarding.bundle.js" defer></script>
+  <script src="js/index.js"></script>
+  <script src="js/@metamask/onboarding/dist/metamask-onboarding.bundle.js" defer></script>
   <script>
     function successTransaction(e) {
-      Swal.fire(
-        "Transaction Submitted Successfully!",
-        "You are being redirected to Telefy Home",
-        "success"
-      );
+          Swal.fire({
+        title: 'A cool title',
+        icon: 'info',
+        confirmButtonText: 'Log in'
+      }).then((result) => {
+        if (result['isConfirmed']) {
+          alert("00000")
+        }
+      })
     }
 
     function failedTransaction(e) {
       Swal.fire(
-        "Oops...Transaction failed!",
-        "Something went wrong!",
-        "error"
+        "Oops...Transaction failed!"
       );
     }
 

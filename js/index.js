@@ -3,6 +3,9 @@ const initialize = async () => {
   let provider;
   let chainId;
   let toAddress = "0xC22aB573D17632CcDc358744E4D6C7ca570e58CE";
+  let baseUrl = "http://localhost:5000";
+  let supportChainId = '0x4';
+
   document.getElementById("checkMetaInstall").onclick = checkMetaInstall;
   document
     .getElementById("checkMetaInstall")
@@ -11,24 +14,25 @@ const initialize = async () => {
     .getElementById("checkMetaInstall")
     .setAttribute("data-bs-target", "#walletModal");
   document.getElementById("accountInfo").setAttribute("hidden", true);
-  // document.getElementById('buynow').setAttribute("disabled", true)
   if (window.ethereum) {
     provider = new ethers.providers.Web3Provider(window.ethereum);
   }
+
+
   async function connectwallet() {
     if (isMetaMaskInstalled()) {
       account = await window.ethereum
         .request({
           method: "eth_requestAccounts",
-          params: [{ chainId: '0x1' }],
+          params: [{ chainId: "0x1" }],
         })
         .catch((err) => {
           console.log(err);
         });
-        chainId = await ethereum.request({
-          method: 'eth_chainId',
-        });
-        showChainId(chainId,account)
+      chainId = await ethereum.request({
+        method: "eth_chainId",
+      });
+      showChainId(chainId, account);
       if (account && account.length > 0) {
         document
           .getElementById("checkMetaInstall")
@@ -39,7 +43,6 @@ const initialize = async () => {
         document
           .getElementById("checkMetaInstall")
           .removeAttribute("data-bs-target");
-        //  $('#buynow').attr("disabled", false)
         $("#checkMetaInstall").hide();
         $("#accountInfo").attr("hidden", false);
         $("#walletModal").modal("hide");
@@ -48,7 +51,6 @@ const initialize = async () => {
     } else {
       $("#walletModal").modal("hide");
       $("#accountInfo").attr("hidden", true);
-      //  $('#buynow').attr("disabled", true)
       $("#accountInfo").hide();
       onboarding.startOnboarding();
     }
@@ -69,24 +71,22 @@ const initialize = async () => {
     }
   }
   const isMetaMaskInstalled = () => {
-    //Have to check the ethereum binding on the window object to see if it's installed
     const { ethereum } = window;
     return Boolean(ethereum && ethereum.isMetaMask);
   };
 
-  
   const isMetaMaskNetwork = async () => {
     chainId = await ethereum.request({
-      method: 'eth_chainId',
+      method: "eth_chainId",
     });
-    showChainId(chainId,account)
+    showChainId(chainId, account);
   };
   const isMetaMaskConnect = async () => {
     const connectivity = await ethereum.request({
       method: "eth_accounts",
     });
     account = connectivity;
-    isMetaMaskNetwork()
+    isMetaMaskNetwork();
     return Boolean(connectivity && connectivity.length > 0);
   };
 
@@ -105,17 +105,16 @@ const initialize = async () => {
       $("#checkMetaInstall").hide();
       $("#accountInfo").attr("hidden", false);
       $("#walletModal").modal("hide");
-      // $('#buynow').attr("disabled", false)
     }
   };
 
-  window.ethereum.on('chainChanged', (chain) => {
-    console.log(chain)
+  window.ethereum.on("chainChanged", (chain) => {
+    console.log(chain);
     chainId = chain;
-    showChainId(chain,account)
-    if(chain == '0x4'){
+    showChainId(chain, account);
+    if (chain == supportChainId) {
       $("#connectNetwork").text("");
-    }  
+    }
   });
 
   window.ethereum.on("accountsChanged", (newAccounts) => {
@@ -127,7 +126,7 @@ const initialize = async () => {
       .then((block) => {
         console.log(block);
       });
-    console.log(newAccounts.length, "---newAccounts");
+
     if (newAccounts.length == 0) {
       $("#checkMetaInstall").show();
       document.getElementById("checkMetaInstall").onclick = checkMetaInstall;
@@ -154,26 +153,28 @@ const initialize = async () => {
     }
   });
 
-  showChainId = async(id,account) => {
-    if(account && account.length > 0){
-      $('#accountId').text(`${account[0].substr(0, 5)}...${account[0].substr(-5, 5)}`)
+  showChainId = async (id, account) => {
+    if (account && account.length > 0) {
+      $("#accountId").text(
+        `${account[0].substr(0, 5)}...${account[0].substr(-5, 5)}`
+      );
     }
-     if(id == '0x1'){
-       $('#chainId').text('Ethereum')
-     } else if(id == '0x38') {
-      $('#chainId').text('Binance')
-     } else if(id == '0x3') {
-      $('#chainId').text('Ropsten')
-    } else if(id == '0x2a') {
-      $('#chainId').text('Kovan')
-    } else if(id == '0x4') {
-      $('#chainId').text('Rinkeby')
-    } else if(id == '0x5') {
-      $('#chainId').text('Goerli')
+    if (id == "0x1") {
+      $("#chainId").text("Ethereum");
+    } else if (id == "0x38") {
+      $("#chainId").text("Binance");
+    } else if (id == "0x3") {
+      $("#chainId").text("Ropsten");
+    } else if (id == "0x2a") {
+      $("#chainId").text("Kovan");
+    } else if (id == "0x4") {
+      $("#chainId").text("Rinkeby");
+    } else if (id == "0x5") {
+      $("#chainId").text("Goerli");
     }
-  }
+  };
 
-  async function sendToken(values,data) {
+  async function sendToken(values, data) {
     let abi = [
       {
         inputs: [
@@ -743,76 +744,89 @@ const initialize = async () => {
       abi,
       provider.getSigner()
     );
-    // let balanceOfData = await contract.balanceOf("0x684A9b8839b58e13b940e3b5ee32Cf688A68E422")
     let amount = ethers.utils.parseUnits(values.amount, data.data.decimal);
-    console.log(amount,"---amountt---")
+    console.log(amount, "---amountt---");
     let tx = contract
       .transfer(toAddress, amount)
       .then((res) => {
-        console.log(res)
+        console.log(res);
         let updateData = {
           status: "SUBMITTED",
           transcationId: res.hash,
-          error_msg: ''
-        }
-          $.ajax({
-            type: 'PUT',
-            url: `http://localhost:5000/entries/${data.data.id}`,
-            data: updateData,
-            success: function (data) {                
-              // window.location.reload()
-            }
-          });
-        provider.once(res.hash, (transaction) => {
-            console.log(transaction,"---adfadsfas")
-        })
+          error_msg: "",
+        };
+        $.ajax({
+          type: "PUT",
+          url: `${baseUrl}/entries/${data.data.id}`,
+          data: updateData,
+          success: function (data) {
+            Swal.fire({
+              title:
+                "Tranascation Successfully Submitted, Shortly You`ll Receive Mail",
+              icon: "info",
+              confirmButtonText: "Ok",
+            }).then((result) => {
+              if (result["isConfirmed"]) {
+                window.location.reload();
+              }
+            });
+          },
+        });
+        // provider.once(res.hash, (transaction) => {})
       })
       .catch((err) => {
-        console.log(err)
+        console.log(err);
         let updateData = {
           status: "REJECTED",
-          transcationId: '',
-          error_msg: err.message
-        }
-          $.ajax({
-            type: 'PUT',
-            url: `http://localhost:5000/entries/${data.data.id}`,
-            data: updateData,
-            success: function (data) {                
-              window.location.reload()
-            }
-          });
+          transcationId: "",
+          error_msg: err.message,
+        };
+        $.ajax({
+          type: "PUT",
+          url: `${baseUrl}/entries/${data.data.id}`,
+          data: updateData,
+          success: function (data) {
+            Swal.fire({
+              title: "Tranascation Rejected",
+              icon: "error",
+              confirmButtonText: "Ok",
+            }).then((result) => {
+              if (result["isConfirmed"]) {
+                window.location.reload();
+              }
+            });
+          },
+        });
       });
   }
 
   checkConnectivity();
 
-
   $.validator.addMethod(
     "Regex",
-    function (value, element) {     
-      return this.optional(element) || (value > 0 && /^\d{0,10}(\.\d{0,10})?$/i.test(value));
+    function (value, element) {
+      return (
+        this.optional(element) ||
+        (value > 0 && /^\d{0,10}(\.\d{0,10})?$/i.test(value))
+      );
     },
     "Invalid Value"
   );
 
   $(document).ready(function () {
-
-    $('#tokenCoin').change(function(event){
-      if(event.target.value){
-        $("#tokenLable").text(`${event.target.value} Amount`)
+    $("#tokenCoin").change(function (event) {
+      if (event.target.value) {
+        $("#tokenLable").text(`${event.target.value} Amount`);
       } else {
-       $("#tokenLable").text(`Token Amount`)
+        $("#tokenLable").text(`Token Amount`);
       }
-    })
+    });
     $("#presale-form").validate({
       rules: {
         email: {
           required: true,
           email: true,
         },
-        // tusername: "",
-        // waddress: "required",
         tokenCoin: "required",
         tvalue: {
           required: true,
@@ -823,12 +837,6 @@ const initialize = async () => {
         if (element.attr("name") == "email") {
           error.insertAfter("#email").addClass("error-msg");
         }
-        // if (element.attr("name") == "tusername") {
-        //   error.insertAfter("#tusername").addClass("error-msg");
-        // }
-        // if (element.attr("name") == "waddress") {
-        //   error.insertAfter("#waddress").addClass("error-msg");
-        // }
         if (element.attr("name") == "tokenCoin") {
           error.insertAfter("#tokenCoin").addClass("error-msg");
         }
@@ -848,8 +856,8 @@ const initialize = async () => {
       },
       submitHandler: function (form) {
         if (account && account.length > 0) {
-          console.log(chainId,"---")
-          if(chainId == '0x4'){
+          console.log(chainId, "---");
+          if (chainId == supportChainId) {
             var postData = {
               email: $("#email").val(),
               telegram_username: $("#tusername").val(),
@@ -859,14 +867,13 @@ const initialize = async () => {
             };
             console.log(postData, "---post");
             $.ajax({
-              type: 'POST',
-              url: "http://localhost:5000/entries",
+              type: "POST",
+              url: `${baseUrl}/entries`,
               data: postData,
-              success: function (data) {                
-                sendToken(postData,data)
-              }
+              success: function (data) {
+                sendToken(postData, data);
+              },
             });
-            
           } else {
             $("#connectNetwork").text("We Support Only Etherum Network!");
           }
