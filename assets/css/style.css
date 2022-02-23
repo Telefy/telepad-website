@@ -125,6 +125,7 @@ h6 {
   transition: all 0.5s;
   z-index: 997;
   padding: 20px 0;
+  background: rgba(38, 1, 43, 1);
 }
 #header.header-scrolled,
 #header.header-inner-pages {
@@ -1806,4 +1807,17 @@ hr {
 }
 .secondary-text {
   color: #ff63ce;
+}
+.status-list-group .badge {
+  color: #fff;
+  font-weight: 200;
+}
+.status-badge {
+  color: #ff9800 !important;
+  font-weight: 200;
+}
+.list-group-item {
+  color: #fff !important;
+  background: #773983 !important;
+  font-weight: 200;
 }
