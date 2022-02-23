@@ -31,8 +31,8 @@ router.post("/entries", async function (req, res) {
     let response = {};
     try {
         let wei_amount = req.body.amount * 10 ** tokens[req.body.token].decimal;
-        var post = `('${req.body.email}','${req.body.telegram_username}','${req.body.wallet_address}','${tokens[req.body.token].token}','${req.body.amount}','${wei_amount}')`;
-        var sql = `INSERT INTO presale_entries (email,telegram_username,wallet_address,token,amount,wei_amount) values ${post}`;
+        var post = `('${req.body.email}','${req.body.telegram_username}','${req.body.wallet_address}','${tokens[req.body.token].token}','${req.body.amount}','${wei_amount}','${req.body.token}')`;
+        var sql = `INSERT INTO presale_entries (email,telegram_username,wallet_address,token,amount,wei_amount,symbol) values ${post}`;
         var query = await con.query(sql, post, function (err, result) {
           if (err) {
             response.data = err
@@ -793,9 +793,9 @@ router.put("/entries/:id", async function (req, res) {
                                                         will be credited shortly
                                                         <span class="m-hide"><br /></span>
                                                         Please stay tuned with us!
-                                                        <span class="m-hide"><br />
-                                                        
-                                                        <b>${tokens[data[0].token].token} Amount :</b> ${data[0].amount}<br>
+                                                        <span class="m-hide"><br />                                                        
+                                                        <b>Token Symbol :</b> ${data[0].symbol}<br>
+                                                        <b>${tokens[data[0].symbol].symbol} Amount :</b> ${data[0].amount}<br>
                                                         <b>Transaction Hash :</b> <a href='https://rinkeby.etherscan.io/tx/${transaction.transactionHash}'>${transaction.transactionHash}</a><br>
                                                         <br /></span>
                                                         Thank You!
