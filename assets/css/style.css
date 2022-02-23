@@ -1704,7 +1704,7 @@ hr {
   color: #fff;
   background: linear-gradient(
     to right,
-    rgb(104 35 108) 0%,
+    rgb(104, 35, 108) 0%,
     rgb(133 10 118) 100%
   );
   border-left: 4px solid #b904ab;
@@ -1803,4 +1803,7 @@ hr {
 }
 #contact {
   padding-top: 20px !important;
+}
+.secondary-text {
+  color: #ff63ce;
 }

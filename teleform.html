@@ -5,7 +5,7 @@
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
 
-  <title>Telefyform</title>
+  <title>Pre Sale</title>
   <meta content="" name="description" />
   <meta content="" name="keywords" />
 
@@ -33,7 +33,6 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
-
 </head>
 
 <body>
@@ -66,11 +65,11 @@
     <section id="breadcrumbs" class="breadcrumbs">
       <div class="container">
         <div class="d-flex justify-content-between align-items-center">
-          <h2>Telefy Form</h2>
+          <h2>Pre-Sale</h2>
           <div class="account-info" id="accountInfo">
             <div class="network" id="chainId"></div>
             <!-- <div>0.07026 ETH</div> -->
-            <div class="w-address" id="accountId" onclick="failedTransaction()"></div>
+            <div class="w-address" id="accountId"></div>
           </div>
         </div>
       </div>
@@ -95,8 +94,11 @@
               <div class="container" data-aos="fade-up">
                 <div class="section-title">
                   <h2>Fill the details</h2>
-                  <p class="error-msg" id="connectBuynow" style="font-size: larger;"></p>
-                  <p class="error-msg" id="connectNetwork" style="font-size: larger;"></p>
+                  <div class="py-2">
+                    <p>Pre-Sale registration to buy Tele Tokens</p>
+                  </div>
+                  <p class="error-msg" id="connectBuynow" style="font-size: larger"></p>
+                  <p class="error-msg" id="connectNetwork" style="font-size: larger"></p>
                 </div>
 
                 <form id="presale-form" action="" class="php-email-form" method="post">
@@ -127,19 +129,19 @@
                         <option value="WETH">WETH</option>
                         <option value="USDC">USDC</option>
                         <option value="DAI">DAI</option>
-                      </select>
+                     </select>
                     </div>
 
                     <div class="col-md-6 form-group mt-3 mt-md-0">
                       <label id="tokenLable">Token Amount</label>
-                      <input type="text" class="form-control" name="tvalue" id="tvalue" placeholder="0.0"
-                        required />
+                      <span class="ml-2 secondary-text" data-toggle="tooltip" data-placement="top"
+                        title="Token amount should not be exceeded more than 5000"><i
+                          class="bi bi-info-circle-fill"></i></span>
+                      <input type="text" class="form-control" name="tvalue" id="tvalue" placeholder="0.0" required />
                     </div>
                   </div>
-                  <div class="text-center mt-3">
-                    <button type="submit" id="buynow">
-                      Buy Now
-                    </button>
+                  <div class="text-center mt-5">
+                    <button type="submit" id="buynow">Buy Now</button>
                   </div>
                 </form>
               </div>
@@ -308,31 +310,30 @@
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
 
-
   <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
   <script src="js/index.js"></script>
   <script src="js/@metamask/onboarding/dist/metamask-onboarding.bundle.js" defer></script>
   <script>
     function successTransaction(e) {
-          Swal.fire({
-        title: 'A cool title',
-        icon: 'info',
-        confirmButtonText: 'Log in'
-      }).then((result) => {
-        if (result['isConfirmed']) {
-          alert("00000")
-        }
-      })
+      Swal.fire(
+        "Transaction Submitted Successfully!",
+        "You are being redirected to Telefy Home",
+        "success"
+      );
     }
 
     function failedTransaction(e) {
       Swal.fire(
-        "Oops...Transaction failed!"
+        "Oops...Transaction failed!",
+        "Something went wrong!",
+        "error"
       );
     }
-
-
-   
+  </script>
+  <script>
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip();
+    });
   </script>
 </body>
 
