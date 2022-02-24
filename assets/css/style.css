@@ -479,6 +479,9 @@ h6 {
     min-width: auto !important;
     height: auto !important;
   }
+  .status-display div {
+    padding: 5px 5px !important;
+  }
 }
 @media (max-width: 575px) {
   #hero .hero-img img {
@@ -1803,7 +1806,7 @@ hr {
   font-size: 12px;
 }
 #contact {
-  padding-top: 20px !important;
+  padding-top: 30px !important;
 }
 .secondary-text {
   color: #ff63ce;
@@ -1820,4 +1823,41 @@ hr {
   color: #fff !important;
   background: #773983 !important;
   font-weight: 200;
+}
+.status-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+}
+.status-display div {
+  display: inline-flex;
+  justify-content: center;
+  min-width: 50%;
+  padding: 5px 0px;
+  align-items: center;
+  font-size: 12px;
+  color: #e782cb;
+  border: 1px solid #81388b;
+  background: #54285c;
+}
+.status-display span {
+  margin-left: 14px;
+}
+.status-display span.status {
+  color: #edbbf5;
+}
+.pre-sale .section-title h2 {
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding-bottom: 9px;
+  margin-bottom: 5px;
+  position: relative;
+}
+section.pre-sale {
+  padding: 30px 0 !important;
+}
+.pre-sale .section-title {
+  padding-bottom: 20px;
 }
