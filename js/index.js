@@ -108,51 +108,54 @@ const initialize = async () => {
     }
   };
 
-  window.ethereum.on("chainChanged", (chain) => {
-    console.log(chain);
-    chainId = chain;
-    showChainId(chain, account);
-    if (chain == supportChainId) {
-      $("#connectNetwork").text("");
-    }
-  });
+  if(account && account.length > 0 ){
 
-  window.ethereum.on("accountsChanged", (newAccounts) => {
-    window.ethereum
-      .request({
-        method: "eth_getBlockByNumber",
-        params: ["latest", false],
-      })
-      .then((block) => {
-        console.log(block);
-      });
+    window.ethereum.on("chainChanged", (chain) => {
+      console.log(chain);
+      chainId = chain;
+      showChainId(chain, account);
+      if (chain == supportChainId) {
+        $("#connectNetwork").text("");
+      }
+    });
 
-    if (newAccounts.length == 0) {
-      $("#checkMetaInstall").show();
-      document.getElementById("checkMetaInstall").onclick = checkMetaInstall;
-      document
-        .getElementById("checkMetaInstall")
-        .setAttribute("data-bs-toggle", "modal");
-      document
-        .getElementById("checkMetaInstall")
-        .setAttribute("data-bs-target", "#walletModal");
-      document.getElementById("accountInfo").setAttribute("hidden", true);
-      account = "";
-      $("#connectNetwork").text("");
-    } else {
-      document
-        .getElementById("checkMetaInstall")
-        .removeEventListener("onclick", checkMetaInstall);
-      document
-        .getElementById("checkMetaInstall")
-        .removeAttribute("data-bs-toggle");
-      document
-        .getElementById("checkMetaInstall")
-        .removeAttribute("data-bs-target");
-      $("#checkMetaInstall").hide();
-      $("#accountInfo").attr("hidden", false);
-    }
-  });
+    window.ethereum.on("accountsChanged", (newAccounts) => {
+      window.ethereum
+        .request({
+          method: "eth_getBlockByNumber",
+          params: ["latest", false],
+        })
+        .then((block) => {
+          console.log(block);
+        });
+
+      if (newAccounts.length == 0) {
+        $("#checkMetaInstall").show();
+        document.getElementById("checkMetaInstall").onclick = checkMetaInstall;
+        document
+          .getElementById("checkMetaInstall")
+          .setAttribute("data-bs-toggle", "modal");
+        document
+          .getElementById("checkMetaInstall")
+          .setAttribute("data-bs-target", "#walletModal");
+        document.getElementById("accountInfo").setAttribute("hidden", true);
+        account = "";
+        $("#connectNetwork").text("");
+      } else {
+        document
+          .getElementById("checkMetaInstall")
+          .removeEventListener("onclick", checkMetaInstall);
+        document
+          .getElementById("checkMetaInstall")
+          .removeAttribute("data-bs-toggle");
+        document
+          .getElementById("checkMetaInstall")
+          .removeAttribute("data-bs-target");
+        $("#checkMetaInstall").hide();
+        $("#accountInfo").attr("hidden", false);
+      }
+    });
+  }
 
   showChainId = async (id, account) => {
     if (account && account.length > 0) {
