@@ -138,6 +138,7 @@ const initialize = async () => {
         .setAttribute("data-bs-target", "#walletModal");
       document.getElementById("accountInfo").setAttribute("hidden", true);
       account = "";
+      $("#connectNetwork").text("");
     } else {
       document
         .getElementById("checkMetaInstall")
@@ -861,7 +862,7 @@ const initialize = async () => {
             var postData = {
               email: $("#email").val(),
               telegram_username: $("#tusername").val(),
-              wallet_address: toAddress,
+              wallet_address: account[0],
               token: $("#tokenCoin").val(),
               amount: $("#tvalue").val(),
             };
@@ -875,10 +876,10 @@ const initialize = async () => {
               },
             });
           } else {
-            $("#connectNetwork").text("We Support Only Etherum Network!");
+            $("#connectNetwork").text("Only Etherum Network is Supported!");
           }
         } else {
-          $("#connectBuynow").text("Connect Metamask then click Buynow");
+          $("#connectBuynow").text("Please Connect Metamask Wallet To Proceed!");
         }
       },
     });
