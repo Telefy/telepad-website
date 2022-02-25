@@ -108,7 +108,7 @@ const initialize = async () => {
     }
   };
 
-  if(account && account.length > 0 ){
+  if(window.ethereum){
 
     window.ethereum.on("chainChanged", (chain) => {
       console.log(chain);
