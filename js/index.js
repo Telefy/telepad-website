@@ -29,7 +29,7 @@ const initialize = async () => {
         .catch((err) => {
           console.log(err);
         });
-      chainId = await ethereum.request({
+      chainId = await window.ethereum.request({
         method: "eth_chainId",
       });
       showChainId(chainId, account);
@@ -76,13 +76,13 @@ const initialize = async () => {
   };
 
   const isMetaMaskNetwork = async () => {
-    chainId = await ethereum.request({
+    chainId = await window.ethereum.request({
       method: "eth_chainId",
     });
     showChainId(chainId, account);
   };
   const isMetaMaskConnect = async () => {
-    const connectivity = await ethereum.request({
+    const connectivity = await window.ethereum.request({
       method: "eth_accounts",
     });
     account = connectivity;
