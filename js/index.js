@@ -3,7 +3,7 @@ const initialize = async () => {
   let provider;
   let chainId;
   let toAddress = "0xC22aB573D17632CcDc358744E4D6C7ca570e58CE";
-  let baseUrl = "http://localhost:5000";
+  let baseUrl = "http://telepadapi.telefy.finance";
   let supportChainId = '0x4';
 
   document.getElementById("checkMetaInstall").onclick = checkMetaInstall;
