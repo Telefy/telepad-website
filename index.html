@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <base href="http://localhost/telefyPersale/" >
+    <!-- <base href="http://localhost/telefyPersale/" > -->
     <title>Tele Launchpad</title>
     <meta content="" name="description" />
     <meta content="" name="keywords" />
@@ -104,10 +104,10 @@
       <div class="container-fluid" data-aos="fade-up">
         <div class="row justify-content-center">
           <div
-            class="col-xl-5 col-lg-6 pt-3 pt-lg-0 order-2 order-lg-1 d-flex flex-column justify-content-center"
+            class="col-xl-5 col-lg-6 pt-5 mt-4 pt-lg-0 order-2 order-lg-1 d-flex flex-column justify-content-center"
           >
             <h1>
-              Worlds first credit score oriented multi chain DEFI solution
+              World's first credit score oriented multi chain DEFI solution
             </h1>
             <!-- <h2>20% Bonus tokens Target- 50000000</h2> -->
 
@@ -115,6 +115,18 @@
               <a href="teleform.html" class="btn-get-started scrollto"
                 >Enter Pre Sale to get 50% Discount</a
               >
+            </div>
+            <div class="row">
+              <div class="col-lg-12">
+              <div class="sale-price-info">
+                <div class="line-1">
+                  <div>Pre Sale Price:</div> 
+                <p> $0.05 (After 50% Discount of $0.1 = $.05) +30% Bonus tokens</p>
+                </div>
+                <div class="line-2"><div>Private Sale Price:</div> 
+              <p>  $0.075 (After 50% Discount = $.075) +20% Bonus tokens</p></div>
+              </div>
+              </div>
             </div>
             <!-- <div class="row">
               <div class="col-lg-6">
@@ -167,8 +179,55 @@
               </div>
               <div class="simply-countdown simply-countdown-one"></div>
             </div>
-            <div class="progressbar-container">
-             
+            <div class="row">
+              <div class="col-xl-12">
+           <!-- <h6>$TELE token pre sale progress</h6> -->
+                <div class="wrapper">
+                  <div class="container">
+                
+                    <div class="slider-wrapper">
+                      <div id="slider-range"></div>
+                
+                      <div class="range-wrapper">
+                        <div class="range"></div>
+                        <div class="range-alert">+</div>
+                
+                        <div class="gear-wrapper">
+                          <div class="gear-large gear-one">
+                            <div class="gear-tooth"></div>
+                            <div class="gear-tooth"></div>
+                            <div class="gear-tooth"></div>
+                            <div class="gear-tooth"></div>
+                          </div>
+                          <div class="gear-large gear-two">
+                            <div class="gear-tooth"></div>
+                            <div class="gear-tooth"></div>
+                            <div class="gear-tooth"></div>
+                            <div class="gear-tooth"></div>
+                          </div>
+                        </div>
+                
+                      </div>
+                
+                      <div class="marker marker-0"><sup>$</sup>1,000,000</div>
+                    
+                      <div class="marker marker-25"><sup>$</sup>2,000,000</div>
+                  
+                      <div class="marker marker-50"><sup>$</sup>3,000,000</div>
+                      <div class="marker marker-75"><sup>$</sup>4,000,000</div>
+                      <div class="marker marker-100"><sup>$</sup>50,000,000</div>
+  
+                      <div class="marker-title marker-0">Soft Cap</div>
+                      <div class="marker-title marker-25">Hard Cap</div>
+  
+                    </div>
+                
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- <div >
               <div class="progress">
                 <div
                   class="progress-bar"
@@ -191,9 +250,7 @@
                 <div class="col">  <div class="pro-marker"></div><span>80</span></div>
                 <div class="col">  <div class="pro-marker"></div>100</div>
               </div>
-
-
-            </div> 
+            </div>  -->
 
             </div>
             <!-- <img
@@ -215,6 +272,8 @@
               </div>
             </div> -->
           </div>
+
+         
         </div>
       </div>
     </section>
@@ -1171,6 +1230,8 @@
     <div id="preloader"></div>
 
     <!-- Vendor JS Files -->
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/jquery-ui.min.js"></script>
     <script src="assets/vendor/purecounter/purecounter.js"></script>
     <script src="assets/vendor/aos/aos.js"></script>
     <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -1193,5 +1254,114 @@
         seconds: 0,
       });
     </script>
+    <script>
+      $(function() {
+
+// Initiate Slider
+$('#slider-range').slider({
+  range: true,
+  min: 1000000,
+  max: 5000000,
+  step: 100,
+  values: [1000000, 2000000]
+});
+
+// Move the range wrapper into the generated divs
+$('.ui-slider-range').append($('.range-wrapper'));
+
+// Apply initial values to the range container
+$('.range').html('<span class="range-value"><sup>$</sup>' + $('#slider-range').slider("values", 0).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + '</span><span class="range-divider"></span><span class="range-value"><sup>$</sup>' + $("#slider-range").slider("values", 1).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + '</span>');
+
+// Show the gears on press of the handles
+$('.ui-slider-handle, .ui-slider-range').on('mousedown', function() {
+  $('.gear-large').addClass('active');
+});
+
+// Hide the gears when the mouse is released
+// Done on document just incase the user hovers off of the handle
+$(document).on('mouseup', function() {
+  if ($('.gear-large').hasClass('active')) {
+    $('.gear-large').removeClass('active');
+  }
+});
+
+// Rotate the gears
+var gearOneAngle = 0,
+  gearTwoAngle = 0,
+  rangeWidth = $('.ui-slider-range').css('width');
+
+$('.gear-one').css('transform', 'rotate(' + gearOneAngle + 'deg)');
+$('.gear-two').css('transform', 'rotate(' + gearTwoAngle + 'deg)');
+
+$('#slider-range').slider({
+  slide: function(event, ui) {
+
+    // Update the range container values upon sliding
+
+    $('.range').html('<span class="range-value"><sup>$</sup>' + ui.values[0].toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + '</span><span class="range-divider"></span><span class="range-value"><sup>$</sup>' + ui.values[1].toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + '</span>');
+
+    // Get old value
+    var previousVal = parseInt($(this).data('value'));
+
+    // Save new value
+    $(this).data({
+      'value': parseInt(ui.value)
+    });
+
+    // Figure out which handle is being used
+    if (ui.values[0] == ui.value) {
+
+      // Left handle
+      if (previousVal > parseInt(ui.value)) {
+        // value decreased
+        gearOneAngle -= 7;
+        $('.gear-one').css('transform', 'rotate(' + gearOneAngle + 'deg)');
+      } else {
+        // value increased
+        gearOneAngle += 7;
+        $('.gear-one').css('transform', 'rotate(' + gearOneAngle + 'deg)');
+      }
+
+    } else {
+
+      // Right handle
+      if (previousVal > parseInt(ui.value)) {
+        // value decreased
+        gearOneAngle -= 7;
+        $('.gear-two').css('transform', 'rotate(' + gearOneAngle + 'deg)');
+      } else {
+        // value increased
+        gearOneAngle += 7;
+        $('.gear-two').css('transform', 'rotate(' + gearOneAngle + 'deg)');
+      }
+
+    }
+
+    if (ui.values[1] === 110000) {
+      if (!$('.range-alert').hasClass('active')) {
+        $('.range-alert').addClass('active');
+      }
+    } else {
+      if ($('.range-alert').hasClass('active')) {
+        $('.range-alert').removeClass('active');
+      }
+    }
+  }
+});
+
+// Prevent the range container from moving the slider
+$('.range, .range-alert').on('mousedown', function(event) {
+  event.stopPropagation();
+});
+
+});
+    </script>
+      <script>
+        $(function() {
+            $("#slider-range").slider();
+            $("#slider-range").slider("disable");
+        });
+    </script>
+    
   </body>
 </html>
