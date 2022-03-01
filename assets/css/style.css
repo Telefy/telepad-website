@@ -478,6 +478,7 @@ h6 {
   .timer-box {
     min-width: auto !important;
     height: auto !important;
+    padding: 10px !important;
   }
   .status-display div {
     padding: 5px 5px !important;
@@ -487,6 +488,61 @@ h6 {
   }
   .sale-price-info {
     width: 100% !important;
+  }
+  #hero .btn-get-started {
+    font-size: 14px !important;
+  }
+  .wrapper {
+    display: table;
+    width: 90% !important;
+    margin: 0 auto;
+  }
+  .range {
+    width: 110px !important;
+  }
+  .range-value {
+    width: 52px !important;
+    padding: 5px 0 !important;
+    font-size: 8px !important;
+  }
+  .simply-countdown > .simply-section {
+    width: 70px !important;
+    height: 70px !important;
+  }
+  .simply-countdown > .simply-section > div {
+    width: 70px !important;
+    height: 70px !important;
+  }
+  .simply-countdown > .simply-section .simply-amount {
+    font-size: 22px !important;
+  }
+  .simply-countdown > .simply-section .simply-word {
+    font-size: 10px !important;
+  }
+  .marker-title {
+    top: 25px !important;
+    padding-top: 16px;
+    font-size: 10px !important;
+  }
+  .note-info {
+    height: 50px !important;
+    padding: 6px !important;
+    font-size: 10px !important;
+    margin: 0 auto;
+  }
+  .sale-price-info table tr td {
+    padding: 2px 5px !important;
+    font-size: 9px !important;
+  }
+  .sale-price-info table tr th {
+    padding: 5px !important;
+    font-size: 8px !important;
+  }
+  .custom-btn {
+    font-size: 12px !important;
+  }
+  .about .content .read-more {
+    font-size: 12px !important;
   }
 }
 @media (max-width: 575px) {
@@ -1873,6 +1929,7 @@ sup {
   vertical-align: middle;
   position: relative;
   top: 0px;
+  display: none;
 }
 
 .wrapper {
@@ -2058,7 +2115,9 @@ sup {
 .marker-25 {
   left: 25%;
 }
-
+.marker-title-25 {
+  left: 38%;
+}
 .marker-50 {
   left: 50%;
 }
@@ -2070,6 +2129,10 @@ sup {
 .marker-100 {
   right: 0;
   transform: translateX(50%);
+}
+.marker-title-100 {
+  right: 0;
+  transform: translateX(50%) !important;
 }
 .marker-100:after {
   display: none;
@@ -2153,30 +2216,56 @@ sup {
 }
 .sale-price-info {
   width: 90%;
-  background: #9c4098;
-  margin-top: 20px;
+  /* background: #9c4098; */
+  margin-top: 35px;
   padding: 10px;
   border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: nowrap;
 }
-.sale-price-info .line-1 div {
-  background: #612476;
-  padding: 2px 10px;
-  margin-bottom: 5px;
+.sale-price-info div {
   border-radius: 4px;
-  color: #fa60cd;
-  font-size: 16px;
+  color: #fff;
+  font-size: 14px;
+  overflow: hidden;
+  text-align: center;
 }
-.sale-price-info .line-2 div {
-  background: #612476;
-  padding: 2px 10px;
-  margin-bottom: 5px;
-  border-radius: 4px;
-  color: #fa60cd;
-  font-size: 16px;
-}
+
 .sale-price-info div p {
   padding-left: 10px;
   margin-bottom: 2px;
   color: #ddd;
-  font-size: 14px;
+  font-size: 12px;
+}
+.sale-price-info table {
+  padding: 5px;
+}
+.sale-price-info table tr th {
+  background: linear-gradient(45deg, #9f19ab 0%, #ff63ce 100%);
+  padding: 12px;
+  font-weight: 600;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  color: #f5ebff;
+}
+.sale-price-info table tr td {
+  background-color: #703785;
+  padding: 2px 5px;
+  font-size: 12px;
+  color: #fbafe5;
+}
+.note-info {
+  width: 90%;
+  height: 35px;
+  padding: 6px;
+  background: #703785;
+  border-radius: 9px;
+  font-size: 10px;
+  font-style: italic;
+  text-align: center;
+  line-height: 2;
+  vertical-align: middle;
+  color: #fff;
+  letter-spacing: 0.2px;
 }
