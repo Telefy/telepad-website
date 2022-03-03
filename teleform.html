@@ -115,7 +115,7 @@
                   <div class="section-title">
                     <h2>Fill the details</h2>
                     <div class="py-2">
-                      <p>Pre-Sale registration for buy Tele Tokens</p>
+                      <p>Pre-Sale registration to buy Tele tokens</p>
                     </div>
                     <p
                       class="error-msg"
@@ -155,7 +155,6 @@
                           class="form-control"
                           id="tusername"
                           placeholder="Telegram User Name"
-                          required
                         />
                       </div>
                     </div>
@@ -176,21 +175,18 @@
                           required
                         >
                           <option value="">--</option>
-                          <option value="WETH">WETH</option>
-                          <option value="USDC">USDC</option>
-                          <option value="DAI">DAI</option>
                         </select>
                       </div>
 
                       <div class="col-md-6 form-group mt-3 mt-md-0">
                         <label id="tokenLable">Token Amount</label>
-                        <span
+                        <!-- <span
                           class="ml-2 secondary-text"
                           data-toggle="tooltip"
                           data-placement="top"
-                          title="Token amount should not be exceeded more than $5000"
+                          title="Token amount should not exceed more than equivalent value of 5000 dollars"
                           ><i class="bi bi-info-circle-fill"></i
-                        ></span>
+                        ></span> -->
                         <input
                           type="text"
                           class="form-control"
@@ -216,8 +212,8 @@
                         </div>
                       </div>
                       <div class="status-display">
-                        <div>Min Buy : <span>0.1 BNB</span></div>
-                        <div>Max Buy : <span>20 BNB</span></div>
+                        <div>Min Buy : <span id="minContent"></span></div>
+                        <div>Max Buy : <span id="maxContent"></span></div>
                       </div>
                     </div>
                   </div>
@@ -417,9 +413,21 @@
       src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
       type="application/javascript"
     ></script>
+    <!-- <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.7.1-rc.0/web3.min.js"
+      type="application/javascript"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.7.1-rc.0/web3.min.js.map"
+      type="application/javascript"
+    ></script> -->
     <script src="js/index.js"></script>
     <script
       src="js/@metamask/onboarding/dist/metamask-onboarding.bundle.js"
+      defer
+    ></script>
+    <script
+      src="node_modules/web3/dist/web3.min.js"
       defer
     ></script>
     <script>
