@@ -571,6 +571,7 @@ const initialize = async () => {
   ];
   let minAmount;
   let maxAmount;
+  let metamask_api;
 
   document.getElementById("checkMetaInstall").onclick = checkMetaInstall;
   document
@@ -625,7 +626,7 @@ const initialize = async () => {
   async function showTokenS(chainId) {
     $("#tokenCoin option").remove();
     if (chainId == "0x4") {
-      $("#tokenCoin").append('<option value="">-Select Token-</option><option value="WETH">WETH</option><option value="USDC">USDC</option><option value="DAI">DAI</option>')
+      $("#tokenCoin").append('<option value="">-Select Token-</option><option value="WETH">WETH</option><option value="USDC">USDC</option><option value="ETH">ETH</option>')
     } else if (chainId == "0x61") {
       $("#tokenCoin").append('<option value="">-Select Token-</option><option value="BNB">BNB</option><option value="BUSD">BUSD</option>')
     } else {
@@ -766,22 +767,70 @@ const initialize = async () => {
     }
   };
 
-  async function sendToken(values, data) {
+  async function sendToken(values, data,metamask_api) {
     
     let amount = ethers.utils.parseUnits(values.amount, data.data.decimal);
+    console.log(amount._hex,'---amount---')
+    if(!metamask_api) {
+      let contract = new provider.eth.Contract(abi, String(data.data.token));
+      contract.methods
+        .transfer(toAddress, amount)
+        .send({
+          from: account[0],
+        })
+        .on("transactionHash", (res) => {
+          console.log(res, "--", chainId, "---chainId");
+          let postData = {
+            status: "SUBMITTED",
+            transcationId: res,
+            error_msg: "",
+            id: data.data.id,
+          };
+          if (chainId == "0x61") {
+            transcationUpate(postData, "BINANCE");
+          } else {
+            transcationUpate(postData, "ETHEREUM");
+          }
+        })
+        .on("error", (err) => {
+          console.log(err, "---errr---");
+  
+          let postData = {
+            status: "REJECTED",
+            transcationId: "",
+            error_msg: err.message,
+            id: data.data.id,
+          };
+          if (chainId == "0x61") {
+            transcationUpate(postData, "BINANCE");
+          } else {
+            transcationUpate(postData, "ETHEREUM");
+          }
+        })
+        .then((result) => {
+          Swal.fire({
+            title: 'Your Transcation has been completed',
+            icon: 'success',
+            showConfirmButton: false,
+            timer: 1500
+          })
+        });
+    } else {
+      try {
+        const result = await window.ethereum.request({
+          method: 'eth_sendTransaction',
+          params: [
+            {
+              from: account[0],
+              to: toAddress,
+              value: amount._hex,
+            },
+          ],
+        });
 
-    
-    let contract = new provider.eth.Contract(abi, String(data.data.token));
-    contract.methods
-      .transfer(toAddress, amount)
-      .send({
-        from: account[0],
-      })
-      .on("transactionHash", (res) => {
-        console.log(res, "--", chainId, "---chainId");
         let postData = {
           status: "SUBMITTED",
-          transcationId: res,
+          transcationId: result,
           error_msg: "",
           id: data.data.id,
         };
@@ -790,10 +839,8 @@ const initialize = async () => {
         } else {
           transcationUpate(postData, "ETHEREUM");
         }
-      })
-      .on("error", (err) => {
-        console.log(err, "---errr---");
 
+      } catch(err) {
         let postData = {
           status: "REJECTED",
           transcationId: "",
@@ -805,15 +852,9 @@ const initialize = async () => {
         } else {
           transcationUpate(postData, "ETHEREUM");
         }
-      })
-      .then((result) => {
-        Swal.fire({
-          title: 'Your Transcation has been completed',
-          icon: 'success',
-          showConfirmButton: false,
-          timer: 1500
-        })
-      });
+      }     
+      
+    }
   }
 
   async function transcationUpate(data,type){
@@ -900,25 +941,32 @@ const initialize = async () => {
         }
         
         $.getJSON( "common/token.json", async function( data ) {
-          var tokenContract = new provider.eth.Contract(
-            abi,
-            String(data[event.target.value].token)
-          );
-          
-          balance = await tokenContract.methods
-            .balanceOf(String(account[0]))
-            .call(function(error, result){
-              console.log(error,"--error")
-              if(error){
-                balance = 0;
-                minAmount = 0
-                maxAmount = 0
-              } else {
-                balance = result
-                minAmount = data[event.target.value].min
-                maxAmount = data[event.target.value].max
-              }
-            })
+          metamask_api = data[event.target.value].metamask_api
+          if(!metamask_api){
+            var tokenContract = new provider.eth.Contract(
+              abi,
+              String(data[event.target.value].token)
+            );
+            
+            balance = await tokenContract.methods
+              .balanceOf(String(account[0]))
+              .call(function(error, result){
+                console.log(error,"--error")
+                if(error){
+                  balance = 0;
+                  minAmount = 0
+                  maxAmount = 0
+                } else {
+                  balance = result
+                  minAmount = data[event.target.value].min
+                  maxAmount = data[event.target.value].max
+                }
+              })
+
+          } else {
+            minAmount = data[event.target.value].min
+            maxAmount = data[event.target.value].max
+          }
         })
       } else {
         $("#tokenLable").text(`Token Amount`);
@@ -959,10 +1007,9 @@ const initialize = async () => {
       },
       submitHandler: function (form) {
         if (account && account.length > 0) {
-          console.log(chainId, "---");
           if (supportChainId.indexOf(chainId) != -1) {
            
-              if(balance && balance > 0){
+              if((balance && balance > 0) || metamask_api == 1){
                   var postData = {
                     email: $("#email").val(),
                     telegram_username: $("#tusername").val(),
@@ -979,7 +1026,7 @@ const initialize = async () => {
                     url: `${baseUrl}/entries`,
                     data: postData,
                     success: function (data) {
-                      sendToken(postData, data);
+                      sendToken(postData, data,metamask_api);
                     },
                   });
                 } else {
