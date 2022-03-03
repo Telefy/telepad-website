@@ -475,437 +475,870 @@ router.put("/entries/:id", async function (req, res) {
          
 
             if(req.body.transcationId){
-              await provider.customHttpProvider.once(req.body.transcationId, async (transaction) => {
-                console.log(transaction.transactionHash,"--------success---")
-                let response_data = JSON.stringify(transaction);
-                if(transaction.status == 1){
-
-                  var sql = `UPDATE presale_entries set status = 'SUCCESS',response_data='${response_data}' where transcation_hash = '${transaction.transactionHash}' limit 1`;
-                } else {
-                  var sql = `UPDATE presale_entries set status = 'FAILURE',response_data='${response_data}' where transcation_hash = '${transaction.transactionHash}' limit 1`;
-                }
-
-                var query = await con.query(sql);
-                var getQuery = await con.query(`SELECT * FROM presale_entries where transcation_hash = '${transaction.transactionHash}' limit 1`, async function(err, data){
-                  if(err){
-                    throw err
+              if(req.body.network == "ETHEREUM"){
+                
+                await provider.customHttpProvider.once(req.body.transcationId, async (transaction) => {
+                  console.log(transaction.transactionHash,"--------success---")
+                  let response_data = JSON.stringify(transaction);
+                  if(transaction.status == 1){
+  
+                    var sql = `UPDATE presale_entries set status = 'SUCCESS',response_data='${response_data}' where transcation_hash = '${transaction.transactionHash}' limit 1`;
                   } else {
-                    if(data.length > 0){
-                      console.log(data,"------")
-                         var message = {
-                          from: "noreply.mazelon@gmail.com",
-                          to: data[0].email,
-                          subject: "Trascation Completed",
-                          // html: `<p>Hi Sir/Madam,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Your Transcation Successfully Completed,<BR>
-                          // <b>Transaction Hash :</b> <a href='https://rinkeby.etherscan.io/tx/${transaction.transactionHash}'>${transaction.transactionHash}</a><br>`
-                          html: `<!DOCTYPE html
-                          PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-                        <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml"
-                          xmlns:o="urn:schemas-microsoft-com:office:office">
-                        
-                        <head>
-                          <!--[if gte mso 9]>
-                              <xml>
-                                <o:OfficeDocumentSettings>
-                                  <o:AllowPNG />
-                                  <o:PixelsPerInch>96</o:PixelsPerInch>
-                                </o:OfficeDocumentSettings>
-                              </xml>
-                            <![endif]-->
-                          <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-                          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-                          <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-                          <meta name="format-detection" content="date=no" />
-                          <meta name="format-detection" content="address=no" />
-                          <meta name="format-detection" content="telephone=no" />
-                          <meta name="x-apple-disable-message-reformatting" />
-                          <!--[if !mso]><!-->
-                          <link href="https://fonts.googleapis.com/css?family=PT+Serif:400,400i,700,700i|Poppins:400,400i,700,700i"
-                            rel="stylesheet" />
-                          <!--<![endif]-->
-                          <title>Telefy Mail</title>
-                          <!--[if gte mso 9]>
-                              <style type="text/css" media="all">
-                                sup {
-                                  font-size: 100% !important;
-                                }
-                              </style>
-                            <![endif]-->
-                        
-                          <style type="text/css" media="screen">
-                            /* Linked Styles */
-                            body {
-                              padding: 0 !important;
-                              margin: 0 !important;
-                              display: block !important;
-                              min-width: 100% !important;
-                              width: 100% !important;
-                              background: #ffffff;
-                              -webkit-text-size-adjust: none;
-                            }
-                        
-                            a {
-                              color: #9f19ab;
-                              text-decoration: none;
-                            }
-                        
-                            p {
-                              padding: 0 !important;
-                              margin: 0 !important;
-                            }
-                        
-                            img {
-                              -ms-interpolation-mode: bicubic;
-                              /* Allow smoother rendering of resized image in Internet Explorer */
-                            }
-                        
-                            .mcnPreviewText {
-                              display: none !important;
-                            }
-                        
-                            /* Mobile styles */
-                            @media only screen and (max-device-width: 480px),
-                            only screen and (max-width: 480px) {
-                              .mobile-shell {
-                                width: 100% !important;
+                    var sql = `UPDATE presale_entries set status = 'FAILURE',response_data='${response_data}' where transcation_hash = '${transaction.transactionHash}' limit 1`;
+                  }
+  
+                  var query = await con.query(sql);
+                  var getQuery = await con.query(`SELECT * FROM presale_entries where transcation_hash = '${transaction.transactionHash}' limit 1`, async function(err, data){
+                    if(err){
+                      throw err
+                    } else {
+                      if(data.length > 0){
+                        console.log(data,"------")
+                           var message = {
+                            from: "noreply.mazelon@gmail.com",
+                            to: data[0].email,
+                            subject: "Trascation Completed",
+                            // html: `<p>Hi Sir/Madam,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Your Transcation Successfully Completed,<BR>
+                            // <b>Transaction Hash :</b> <a href='https://rinkeby.etherscan.io/tx/${transaction.transactionHash}'>${transaction.transactionHash}</a><br>`
+                            html: `<!DOCTYPE html
+                            PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+                          <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml"
+                            xmlns:o="urn:schemas-microsoft-com:office:office">
+                          
+                          <head>
+                            <!--[if gte mso 9]>
+                                <xml>
+                                  <o:OfficeDocumentSettings>
+                                    <o:AllowPNG />
+                                    <o:PixelsPerInch>96</o:PixelsPerInch>
+                                  </o:OfficeDocumentSettings>
+                                </xml>
+                              <![endif]-->
+                            <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+                            <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+                            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+                            <meta name="format-detection" content="date=no" />
+                            <meta name="format-detection" content="address=no" />
+                            <meta name="format-detection" content="telephone=no" />
+                            <meta name="x-apple-disable-message-reformatting" />
+                            <!--[if !mso]><!-->
+                            <link href="https://fonts.googleapis.com/css?family=PT+Serif:400,400i,700,700i|Poppins:400,400i,700,700i"
+                              rel="stylesheet" />
+                            <!--<![endif]-->
+                            <title>Telefy Mail</title>
+                            <!--[if gte mso 9]>
+                                <style type="text/css" media="all">
+                                  sup {
+                                    font-size: 100% !important;
+                                  }
+                                </style>
+                              <![endif]-->
+                          
+                            <style type="text/css" media="screen">
+                              /* Linked Styles */
+                              body {
+                                padding: 0 !important;
+                                margin: 0 !important;
+                                display: block !important;
                                 min-width: 100% !important;
-                              }
-                        
-                              .bg {
-                                background-size: 100% auto !important;
-                                -webkit-background-size: 100% auto !important;
-                              }
-                        
-                              .text-header,
-                              .m-center {
-                                text-align: center !important;
-                              }
-                        
-                              .center {
-                                margin: 0 auto !important;
-                              }
-                        
-                              .container {
-                                padding: 20px 10px !important;
-                              }
-                        
-                              .td {
                                 width: 100% !important;
-                                min-width: 100% !important;
+                                background: #ffffff;
+                                -webkit-text-size-adjust: none;
                               }
-                        
-                              .m-br-15 {
-                                height: 15px !important;
+                          
+                              a {
+                                color: #9f19ab;
+                                text-decoration: none;
                               }
-                        
-                              .p30-15 {
-                                padding: 30px 15px !important;
+                          
+                              p {
+                                padding: 0 !important;
+                                margin: 0 !important;
                               }
-                        
-                              .p0-15-30 {
-                                padding: 0px 15px 30px 15px !important;
+                          
+                              img {
+                                -ms-interpolation-mode: bicubic;
+                                /* Allow smoother rendering of resized image in Internet Explorer */
                               }
-                        
-                              .p0-15 {
-                                padding: 0px 15px !important;
-                              }
-                        
-                              .mpb30 {
-                                padding-bottom: 30px !important;
-                              }
-                        
-                              .mpb15 {
-                                padding-bottom: 15px !important;
-                              }
-                        
-                              .m-td,
-                              .m-hide {
+                          
+                              .mcnPreviewText {
                                 display: none !important;
-                                width: 0 !important;
-                                height: 0 !important;
-                                font-size: 0 !important;
-                                line-height: 0 !important;
-                                min-height: 0 !important;
                               }
-                        
-                              .m-block {
+                          
+                              /* Mobile styles */
+                              @media only screen and (max-device-width: 480px),
+                              only screen and (max-width: 480px) {
+                                .mobile-shell {
+                                  width: 100% !important;
+                                  min-width: 100% !important;
+                                }
+                          
+                                .bg {
+                                  background-size: 100% auto !important;
+                                  -webkit-background-size: 100% auto !important;
+                                }
+                          
+                                .text-header,
+                                .m-center {
+                                  text-align: center !important;
+                                }
+                          
+                                .center {
+                                  margin: 0 auto !important;
+                                }
+                          
+                                .container {
+                                  padding: 20px 10px !important;
+                                }
+                          
+                                .td {
+                                  width: 100% !important;
+                                  min-width: 100% !important;
+                                }
+                          
+                                .m-br-15 {
+                                  height: 15px !important;
+                                }
+                          
+                                .p30-15 {
+                                  padding: 30px 15px !important;
+                                }
+                          
+                                .p0-15-30 {
+                                  padding: 0px 15px 30px 15px !important;
+                                }
+                          
+                                .p0-15 {
+                                  padding: 0px 15px !important;
+                                }
+                          
+                                .mpb30 {
+                                  padding-bottom: 30px !important;
+                                }
+                          
+                                .mpb15 {
+                                  padding-bottom: 15px !important;
+                                }
+                          
+                                .m-td,
+                                .m-hide {
+                                  display: none !important;
+                                  width: 0 !important;
+                                  height: 0 !important;
+                                  font-size: 0 !important;
+                                  line-height: 0 !important;
+                                  min-height: 0 !important;
+                                }
+                          
+                                .m-block {
+                                  display: block !important;
+                                }
+                          
+                                .fluid-img img {
+                                  width: 100% !important;
+                                  max-width: 100% !important;
+                                  height: auto !important;
+                                }
+                          
+                                .column,
+                                .column-dir,
+                                .column-top,
+                                .column-empty,
+                                .column-empty2,
+                                .column-dir-top {
+                                  float: left !important;
+                                  width: 100% !important;
+                                  display: block !important;
+                                }
+                          
+                                .column-empty {
+                                  padding-bottom: 30px !important;
+                                }
+                          
+                                .column-empty2 {
+                                  padding-bottom: 10px !important;
+                                }
+                          
+                                .content-spacing {
+                                  width: 15px !important;
+                                }
+                              }
+                            </style>
+                          </head>
+                          
+                          <body class="body" style="
+                                padding: 0 !important;
+                                margin: 0 !important;
                                 display: block !important;
-                              }
-                        
-                              .fluid-img img {
+                                min-width: 100% !important;
                                 width: 100% !important;
-                                max-width: 100% !important;
-                                height: auto !important;
-                              }
-                        
-                              .column,
-                              .column-dir,
-                              .column-top,
-                              .column-empty,
-                              .column-empty2,
-                              .column-dir-top {
-                                float: left !important;
-                                width: 100% !important;
-                                display: block !important;
-                              }
-                        
-                              .column-empty {
-                                padding-bottom: 30px !important;
-                              }
-                        
-                              .column-empty2 {
-                                padding-bottom: 10px !important;
-                              }
-                        
-                              .content-spacing {
-                                width: 15px !important;
-                              }
-                            }
-                          </style>
-                        </head>
-                        
-                        <body class="body" style="
-                              padding: 0 !important;
-                              margin: 0 !important;
-                              display: block !important;
-                              min-width: 100% !important;
-                              width: 100% !important;
-                              background: #ffffff;
-                              -webkit-text-size-adjust: none;
-                            ">
-                          <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff">
-                            <tr>
-                              <td align="center" valign="top">
-                                <!-- Header -->
-                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                  <tr>
-                                    <td align="center">
-                                      <table width="650" border="0" cellspacing="0" cellpadding="0" class="mobile-shell">
-                                        <tr>
-                                          <td class="td" style="
-                                                width: 650px;
-                                                min-width: 650px;
-                                                font-size: 0pt;
-                                                line-height: 0pt;
-                                                padding: 0;
-                                                margin: 0;
-                                                font-weight: normal;
-                                              ">
-                                            <!-- Header -->
-                                            <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#50075c"
-                                              style="padding: 10px">
-                                              <tr>
-                                                <td class="p30-15 tbrr" style="
-                                                      padding: 10px 0px 10px 0px;
-                                                      border-radius: 12px 12px 0px 0px;
-                                                    ">
-                                                  <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                                    <tr>
-                                                      <th class="column-top" width="145" style="
-                                                            font-size: 0pt;
-                                                            line-height: 0pt;
-                                                            padding: 0;
-                                                            margin: 0;
-                                                            font-weight: normal;
-                                                            vertical-align: top;
-                                                          ">
-                                                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                                          <tr>
-                                                            <td class="img m-center" style="
-                                                                  font-size: 0pt;
-                                                                  line-height: 0pt;
-                                                                  text-align: left;
-                                                                ">
-                                                              <img src="https://telefy.finance/assets/Images/telefy-dark1.png" width="140" border="0" alt="" />
-                                                            </td>
-                                                          </tr>
-                                                        </table>
-                                                      </th>
-                                                      <th class="column-empty2" width="1" style="
-                                                            font-size: 0pt;
-                                                            line-height: 0pt;
-                                                            padding: 0;
-                                                            margin: 0;
-                                                            font-weight: normal;
-                                                            vertical-align: top;
-                                                          "></th>
-                                                      <th class="column" style="
-                                                            font-size: 0pt;
-                                                            line-height: 0pt;
-                                                            padding: 0;
-                                                            margin: 0;
-                                                            font-weight: normal;
-                                                          ">
-                                                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                                          <tr>
-                                                            <td class="text-header" style="
-                                                                  color: #838586;
-                                                                  font-family: Arial, sans-serif;
-                                                                  font-size: 14px;
-                                                                  line-height: 18px;
-                                                                  text-align: right;
-                                                                ">
-                                                              <a href="https://telefy.finance/" target="_blank" class="link" style="
-                                                                    color: #ff63ce;
-                                                                    text-decoration: none;
-                                                                  "><span class="link" style="
+                                background: #ffffff;
+                                -webkit-text-size-adjust: none;
+                              ">
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff">
+                              <tr>
+                                <td align="center" valign="top">
+                                  <!-- Header -->
+                                  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                      <td align="center">
+                                        <table width="650" border="0" cellspacing="0" cellpadding="0" class="mobile-shell">
+                                          <tr>
+                                            <td class="td" style="
+                                                  width: 650px;
+                                                  min-width: 650px;
+                                                  font-size: 0pt;
+                                                  line-height: 0pt;
+                                                  padding: 0;
+                                                  margin: 0;
+                                                  font-weight: normal;
+                                                ">
+                                              <!-- Header -->
+                                              <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#50075c"
+                                                style="padding: 10px">
+                                                <tr>
+                                                  <td class="p30-15 tbrr" style="
+                                                        padding: 10px 0px 10px 0px;
+                                                        border-radius: 12px 12px 0px 0px;
+                                                      ">
+                                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                      <tr>
+                                                        <th class="column-top" width="145" style="
+                                                              font-size: 0pt;
+                                                              line-height: 0pt;
+                                                              padding: 0;
+                                                              margin: 0;
+                                                              font-weight: normal;
+                                                              vertical-align: top;
+                                                            ">
+                                                          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                            <tr>
+                                                              <td class="img m-center" style="
+                                                                    font-size: 0pt;
+                                                                    line-height: 0pt;
+                                                                    text-align: left;
+                                                                  ">
+                                                                <img src="https://telefy.finance/assets/Images/telefy-dark1.png" width="140" border="0" alt="" />
+                                                              </td>
+                                                            </tr>
+                                                          </table>
+                                                        </th>
+                                                        <th class="column-empty2" width="1" style="
+                                                              font-size: 0pt;
+                                                              line-height: 0pt;
+                                                              padding: 0;
+                                                              margin: 0;
+                                                              font-weight: normal;
+                                                              vertical-align: top;
+                                                            "></th>
+                                                        <th class="column" style="
+                                                              font-size: 0pt;
+                                                              line-height: 0pt;
+                                                              padding: 0;
+                                                              margin: 0;
+                                                              font-weight: normal;
+                                                            ">
+                                                          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                            <tr>
+                                                              <td class="text-header" style="
+                                                                    color: #838586;
+                                                                    font-family: Arial, sans-serif;
+                                                                    font-size: 14px;
+                                                                    line-height: 18px;
+                                                                    text-align: right;
+                                                                  ">
+                                                                <a href="https://telefy.finance/" target="_blank" class="link" style="
                                                                       color: #ff63ce;
                                                                       text-decoration: none;
-                                                                    ">Home</span></a>
-                                                            </td>
-                                                          </tr>
-                                                        </table>
-                                                      </th>
-                                                    </tr>
-                                                  </table>
-                                                </td>
-                                              </tr>
-                                            </table>
-                                            <!-- END Header -->
-                        
-                                            <!-- CTA -->
-                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                              <tr>
-                                                <td class="p30-15" style="padding: 60px 40px 34px 40px" bgcolor="#f4f4f4">
-                                                  <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                                    <tr>
-                                                      <td class="h3 center pb15" style="
-                                                            color: #c70cd7;
-                                                            font-family: Arial, sans-serif;
-                                                            font-size: 22px;
-                                                            line-height: 32px;
-                                                            text-align: center;
-                                                            padding-bottom: 15px;
-                                                          ">
-                                                        Dear User!
-                                                      </td>
-                                                    </tr>
-                                                    <tr>
-                                                      <td class="text center pb15" style="
-                                                            color: #666666;
-                                                            font-family: Arial, sans-serif;
-                                                            font-size: 17px;
-                                                            line-height: 28px;
-                                                            text-align: center;
-                                                            padding-bottom: 15px;
-                                                          ">
-                                                        We have recieved your transaction. Tele Tokens
-                                                        will be credited shortly
-                                                        <span class="m-hide"><br /></span>
-                                                        Please stay tuned with us!
-                                                        <span class="m-hide"><br />                                                        
-                                                        <b>Token Symbol :</b> ${data[0].symbol}<br>
-                                                        <b>${tokens[data[0].symbol].symbol} Amount :</b> ${data[0].amount}<br>
-                                                        <b>Transaction Hash :</b> <a href='https://rinkeby.etherscan.io/tx/${transaction.transactionHash}'>${transaction.transactionHash}</a><br>
-                                                        <br /></span>
-                                                        Thank You!
-                                                      </td>
-                                                    </tr>
-                                                  </table>
-                                                </td>
-                                              </tr>
-                                              <tr>
-                                                <td class="pb40"></td>
-                                              </tr>
-                                            </table>
-                                            <!-- END CTA -->
-                        
-                                            <!-- Footer -->
-                                            <table width="100%" border="0" cellspacing="0" cellpadding="0"
-                                              style="padding-top: 40px; background: #f4e3f7">
-                                              <tr>
-                                                <td class="p0-15-30" style="padding-bottom: 40px">
-                                                  <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                                    <tr>
-                                                      <td align="center" style="padding-bottom: 30px">
-                                                        <table border="0" cellspacing="0" cellpadding="0">
-                                                          <tr>
-                                                            <td class="img" width="55" style="
-                                                                  font-size: 0pt;
-                                                                  line-height: 0pt;
-                                                                  text-align: left;
-                                                                ">
-                                                              <a href="https://www.facebook.com/Telefy-104998872116794" target="_blank"><img
-                                                                  src="https://telefy.finance/assets/Images/facebook.png" width="15" height="15" border="0" alt="" /></a>
-                                                            </td>
-                                                            <td class="img" width="55" style="
-                                                                  font-size: 0pt;
-                                                                  line-height: 0pt;
-                                                                  text-align: left;
-                                                                ">
-                                                              <a href="https://twitter.com/TelefyConnect" target="_blank"><img
-                                                                  src="https://telefy.finance/assets/Images/twitter.png" width="15" height="15" border="0" alt="" /></a>
-                                                            </td>
-                                                            <td class="img" width="55" style="
-                                                                  font-size: 0pt;
-                                                                  line-height: 0pt;
-                                                                  text-align: left;
-                                                                ">
-                                                              <a href="https://www.instagram.com/telefy_tele/" target="_blank"><img
-                                                                  src="https://telefy.finance/assets/Images/insta.png" width="15" height="15" border="0" alt="" /></a>
-                                                            </td>
-                                                            <td class="img" width="15" style="
-                                                                  font-size: 0pt;
-                                                                  line-height: 0pt;
-                                                                  text-align: left;
-                                                                ">
-                                                              <a href="https://t.me/telefydefi" target="_blank"><img src="https://telefy.finance/assets/Images/telegram.png"
-                                                                  width="15" height="15" border="0" alt="" /></a>
-                                                            </td>
-                                                          </tr>
-                                                        </table>
-                                                      </td>
-                                                    </tr>
-                                                    <tr>
-                                                      <td class="text-footer1 pb10" style="
-                                                            color: #777777;
-                                                            font-family: Arial, sans-serif;
-                                                            font-size: 14px;
-                                                            line-height: 20px;
-                                                            text-align: center;
-                                                            padding-bottom: 10px;
-                                                          ">
-                                                        TeleFy Finance Limited ©2021 All rights
-                                                        reserved.
-                                                      </td>
-                                                    </tr>
-                                                    <tr>
-                                                      <td class="text-footer2 pb20" style="
-                                                            color: #777777;
-                                                            font-family: Arial, sans-serif;
-                                                            font-size: 12px;
-                                                            line-height: 26px;
-                                                            text-align: center;
-                                                            padding-bottom: 20px;
-                                                          ">
-                                                        info@telefy.finance
-                                                      </td>
-                                                    </tr>
-                                                  </table>
-                                                </td>
-                                              </tr>
-                                            </table>
-                                            <!-- END Footer -->
-                                          </td>
-                                        </tr>
-                                      </table>
-                                    </td>
-                                  </tr>
-                                </table>
-                                <!-- END Header -->
-                              </td>
-                            </tr>
-                          </table>
-                        </body>
-                        
-                        </html>`
-                      };
-
-                      await mailService.sendMail(message);
+                                                                    "><span class="link" style="
+                                                                        color: #ff63ce;
+                                                                        text-decoration: none;
+                                                                      ">Home</span></a>
+                                                              </td>
+                                                            </tr>
+                                                          </table>
+                                                        </th>
+                                                      </tr>
+                                                    </table>
+                                                  </td>
+                                                </tr>
+                                              </table>
+                                              <!-- END Header -->
+                          
+                                              <!-- CTA -->
+                                              <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                <tr>
+                                                  <td class="p30-15" style="padding: 60px 40px 34px 40px" bgcolor="#f4f4f4">
+                                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                      <tr>
+                                                        <td class="h3 center pb15" style="
+                                                              color: #c70cd7;
+                                                              font-family: Arial, sans-serif;
+                                                              font-size: 22px;
+                                                              line-height: 32px;
+                                                              text-align: center;
+                                                              padding-bottom: 15px;
+                                                            ">
+                                                          Dear User!
+                                                        </td>
+                                                      </tr>
+                                                      <tr>
+                                                        <td class="text center pb15" style="
+                                                              color: #666666;
+                                                              font-family: Arial, sans-serif;
+                                                              font-size: 17px;
+                                                              line-height: 28px;
+                                                              text-align: center;
+                                                              padding-bottom: 15px;
+                                                            ">
+                                                          We have recieved your transaction. Tele Tokens
+                                                          will be credited shortly
+                                                          <span class="m-hide"><br /></span>
+                                                          Please stay tuned with us!
+                                                          <span class="m-hide"><br />                                                        
+                                                          <b>Token Symbol :</b> ${data[0].symbol}<br>
+                                                          <b>${tokens[data[0].symbol].symbol} Amount :</b> ${data[0].amount}<br>
+                                                          <b>Transaction Hash :</b> <a href='https://rinkeby.etherscan.io/tx/${transaction.transactionHash}'>${transaction.transactionHash}</a><br>
+                                                          <br /></span>
+                                                          Thank You!
+                                                        </td>
+                                                      </tr>
+                                                    </table>
+                                                  </td>
+                                                </tr>
+                                                <tr>
+                                                  <td class="pb40"></td>
+                                                </tr>
+                                              </table>
+                                              <!-- END CTA -->
+                          
+                                              <!-- Footer -->
+                                              <table width="100%" border="0" cellspacing="0" cellpadding="0"
+                                                style="padding-top: 40px; background: #f4e3f7">
+                                                <tr>
+                                                  <td class="p0-15-30" style="padding-bottom: 40px">
+                                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                      <tr>
+                                                        <td align="center" style="padding-bottom: 30px">
+                                                          <table border="0" cellspacing="0" cellpadding="0">
+                                                            <tr>
+                                                              <td class="img" width="55" style="
+                                                                    font-size: 0pt;
+                                                                    line-height: 0pt;
+                                                                    text-align: left;
+                                                                  ">
+                                                                <a href="https://www.facebook.com/Telefy-104998872116794" target="_blank"><img
+                                                                    src="https://telefy.finance/assets/Images/facebook.png" width="15" height="15" border="0" alt="" /></a>
+                                                              </td>
+                                                              <td class="img" width="55" style="
+                                                                    font-size: 0pt;
+                                                                    line-height: 0pt;
+                                                                    text-align: left;
+                                                                  ">
+                                                                <a href="https://twitter.com/TelefyConnect" target="_blank"><img
+                                                                    src="https://telefy.finance/assets/Images/twitter.png" width="15" height="15" border="0" alt="" /></a>
+                                                              </td>
+                                                              <td class="img" width="55" style="
+                                                                    font-size: 0pt;
+                                                                    line-height: 0pt;
+                                                                    text-align: left;
+                                                                  ">
+                                                                <a href="https://www.instagram.com/telefy_tele/" target="_blank"><img
+                                                                    src="https://telefy.finance/assets/Images/insta.png" width="15" height="15" border="0" alt="" /></a>
+                                                              </td>
+                                                              <td class="img" width="15" style="
+                                                                    font-size: 0pt;
+                                                                    line-height: 0pt;
+                                                                    text-align: left;
+                                                                  ">
+                                                                <a href="https://t.me/telefydefi" target="_blank"><img src="https://telefy.finance/assets/Images/telegram.png"
+                                                                    width="15" height="15" border="0" alt="" /></a>
+                                                              </td>
+                                                            </tr>
+                                                          </table>
+                                                        </td>
+                                                      </tr>
+                                                      <tr>
+                                                        <td class="text-footer1 pb10" style="
+                                                              color: #777777;
+                                                              font-family: Arial, sans-serif;
+                                                              font-size: 14px;
+                                                              line-height: 20px;
+                                                              text-align: center;
+                                                              padding-bottom: 10px;
+                                                            ">
+                                                          TeleFy Finance Limited ©2021 All rights
+                                                          reserved.
+                                                        </td>
+                                                      </tr>
+                                                      <tr>
+                                                        <td class="text-footer2 pb20" style="
+                                                              color: #777777;
+                                                              font-family: Arial, sans-serif;
+                                                              font-size: 12px;
+                                                              line-height: 26px;
+                                                              text-align: center;
+                                                              padding-bottom: 20px;
+                                                            ">
+                                                          info@telefy.finance
+                                                        </td>
+                                                      </tr>
+                                                    </table>
+                                                  </td>
+                                                </tr>
+                                              </table>
+                                              <!-- END Footer -->
+                                            </td>
+                                          </tr>
+                                        </table>
+                                      </td>
+                                    </tr>
+                                  </table>
+                                  <!-- END Header -->
+                                </td>
+                              </tr>
+                            </table>
+                          </body>
+                          
+                          </html>`
+                        };
+  
+                        await mailService.sendMail(message);
+                      }
                     }
+                  });
+                })
+              } else {
+                await provider.bscProvider.once(req.body.transcationId, async (transaction) => {
+                  console.log(transaction.transactionHash,"--------success---")
+                  let response_data = JSON.stringify(transaction);
+                  if(transaction.status == 1){
+  
+                    var sql = `UPDATE presale_entries set status = 'SUCCESS',response_data='${response_data}' where transcation_hash = '${transaction.transactionHash}' limit 1`;
+                  } else {
+                    var sql = `UPDATE presale_entries set status = 'FAILURE',response_data='${response_data}' where transcation_hash = '${transaction.transactionHash}' limit 1`;
                   }
-                });
-              })
+  
+                  var query = await con.query(sql);
+                  var getQuery = await con.query(`SELECT * FROM presale_entries where transcation_hash = '${transaction.transactionHash}' limit 1`, async function(err, data){
+                    if(err){
+                      throw err
+                    } else {
+                      if(data.length > 0){
+                        console.log(data,"------")
+                           var message = {
+                            from: "noreply.mazelon@gmail.com",
+                            to: data[0].email,
+                            subject: "Trascation Completed",
+                            html: `<!DOCTYPE html
+                            PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+                          <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml"
+                            xmlns:o="urn:schemas-microsoft-com:office:office">
+                          
+                          <head>
+                            <!--[if gte mso 9]>
+                                <xml>
+                                  <o:OfficeDocumentSettings>
+                                    <o:AllowPNG />
+                                    <o:PixelsPerInch>96</o:PixelsPerInch>
+                                  </o:OfficeDocumentSettings>
+                                </xml>
+                              <![endif]-->
+                            <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+                            <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+                            <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+                            <meta name="format-detection" content="date=no" />
+                            <meta name="format-detection" content="address=no" />
+                            <meta name="format-detection" content="telephone=no" />
+                            <meta name="x-apple-disable-message-reformatting" />
+                            <!--[if !mso]><!-->
+                            <link href="https://fonts.googleapis.com/css?family=PT+Serif:400,400i,700,700i|Poppins:400,400i,700,700i"
+                              rel="stylesheet" />
+                            <!--<![endif]-->
+                            <title>Telefy Mail</title>
+                            <!--[if gte mso 9]>
+                                <style type="text/css" media="all">
+                                  sup {
+                                    font-size: 100% !important;
+                                  }
+                                </style>
+                              <![endif]-->
+                          
+                            <style type="text/css" media="screen">
+                              /* Linked Styles */
+                              body {
+                                padding: 0 !important;
+                                margin: 0 !important;
+                                display: block !important;
+                                min-width: 100% !important;
+                                width: 100% !important;
+                                background: #ffffff;
+                                -webkit-text-size-adjust: none;
+                              }
+                          
+                              a {
+                                color: #9f19ab;
+                                text-decoration: none;
+                              }
+                          
+                              p {
+                                padding: 0 !important;
+                                margin: 0 !important;
+                              }
+                          
+                              img {
+                                -ms-interpolation-mode: bicubic;
+                                /* Allow smoother rendering of resized image in Internet Explorer */
+                              }
+                          
+                              .mcnPreviewText {
+                                display: none !important;
+                              }
+                          
+                              /* Mobile styles */
+                              @media only screen and (max-device-width: 480px),
+                              only screen and (max-width: 480px) {
+                                .mobile-shell {
+                                  width: 100% !important;
+                                  min-width: 100% !important;
+                                }
+                          
+                                .bg {
+                                  background-size: 100% auto !important;
+                                  -webkit-background-size: 100% auto !important;
+                                }
+                          
+                                .text-header,
+                                .m-center {
+                                  text-align: center !important;
+                                }
+                          
+                                .center {
+                                  margin: 0 auto !important;
+                                }
+                          
+                                .container {
+                                  padding: 20px 10px !important;
+                                }
+                          
+                                .td {
+                                  width: 100% !important;
+                                  min-width: 100% !important;
+                                }
+                          
+                                .m-br-15 {
+                                  height: 15px !important;
+                                }
+                          
+                                .p30-15 {
+                                  padding: 30px 15px !important;
+                                }
+                          
+                                .p0-15-30 {
+                                  padding: 0px 15px 30px 15px !important;
+                                }
+                          
+                                .p0-15 {
+                                  padding: 0px 15px !important;
+                                }
+                          
+                                .mpb30 {
+                                  padding-bottom: 30px !important;
+                                }
+                          
+                                .mpb15 {
+                                  padding-bottom: 15px !important;
+                                }
+                          
+                                .m-td,
+                                .m-hide {
+                                  display: none !important;
+                                  width: 0 !important;
+                                  height: 0 !important;
+                                  font-size: 0 !important;
+                                  line-height: 0 !important;
+                                  min-height: 0 !important;
+                                }
+                          
+                                .m-block {
+                                  display: block !important;
+                                }
+                          
+                                .fluid-img img {
+                                  width: 100% !important;
+                                  max-width: 100% !important;
+                                  height: auto !important;
+                                }
+                          
+                                .column,
+                                .column-dir,
+                                .column-top,
+                                .column-empty,
+                                .column-empty2,
+                                .column-dir-top {
+                                  float: left !important;
+                                  width: 100% !important;
+                                  display: block !important;
+                                }
+                          
+                                .column-empty {
+                                  padding-bottom: 30px !important;
+                                }
+                          
+                                .column-empty2 {
+                                  padding-bottom: 10px !important;
+                                }
+                          
+                                .content-spacing {
+                                  width: 15px !important;
+                                }
+                              }
+                            </style>
+                          </head>
+                          
+                          <body class="body" style="
+                                padding: 0 !important;
+                                margin: 0 !important;
+                                display: block !important;
+                                min-width: 100% !important;
+                                width: 100% !important;
+                                background: #ffffff;
+                                -webkit-text-size-adjust: none;
+                              ">
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff">
+                              <tr>
+                                <td align="center" valign="top">
+                                  <!-- Header -->
+                                  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                      <td align="center">
+                                        <table width="650" border="0" cellspacing="0" cellpadding="0" class="mobile-shell">
+                                          <tr>
+                                            <td class="td" style="
+                                                  width: 650px;
+                                                  min-width: 650px;
+                                                  font-size: 0pt;
+                                                  line-height: 0pt;
+                                                  padding: 0;
+                                                  margin: 0;
+                                                  font-weight: normal;
+                                                ">
+                                              <!-- Header -->
+                                              <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#50075c"
+                                                style="padding: 10px">
+                                                <tr>
+                                                  <td class="p30-15 tbrr" style="
+                                                        padding: 10px 0px 10px 0px;
+                                                        border-radius: 12px 12px 0px 0px;
+                                                      ">
+                                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                      <tr>
+                                                        <th class="column-top" width="145" style="
+                                                              font-size: 0pt;
+                                                              line-height: 0pt;
+                                                              padding: 0;
+                                                              margin: 0;
+                                                              font-weight: normal;
+                                                              vertical-align: top;
+                                                            ">
+                                                          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                            <tr>
+                                                              <td class="img m-center" style="
+                                                                    font-size: 0pt;
+                                                                    line-height: 0pt;
+                                                                    text-align: left;
+                                                                  ">
+                                                                <img src="https://telefy.finance/assets/Images/telefy-dark1.png" width="140" border="0" alt="" />
+                                                              </td>
+                                                            </tr>
+                                                          </table>
+                                                        </th>
+                                                        <th class="column-empty2" width="1" style="
+                                                              font-size: 0pt;
+                                                              line-height: 0pt;
+                                                              padding: 0;
+                                                              margin: 0;
+                                                              font-weight: normal;
+                                                              vertical-align: top;
+                                                            "></th>
+                                                        <th class="column" style="
+                                                              font-size: 0pt;
+                                                              line-height: 0pt;
+                                                              padding: 0;
+                                                              margin: 0;
+                                                              font-weight: normal;
+                                                            ">
+                                                          <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                            <tr>
+                                                              <td class="text-header" style="
+                                                                    color: #838586;
+                                                                    font-family: Arial, sans-serif;
+                                                                    font-size: 14px;
+                                                                    line-height: 18px;
+                                                                    text-align: right;
+                                                                  ">
+                                                                <a href="https://telefy.finance/" target="_blank" class="link" style="
+                                                                      color: #ff63ce;
+                                                                      text-decoration: none;
+                                                                    "><span class="link" style="
+                                                                        color: #ff63ce;
+                                                                        text-decoration: none;
+                                                                      ">Home</span></a>
+                                                              </td>
+                                                            </tr>
+                                                          </table>
+                                                        </th>
+                                                      </tr>
+                                                    </table>
+                                                  </td>
+                                                </tr>
+                                              </table>
+                                              <!-- END Header -->
+                          
+                                              <!-- CTA -->
+                                              <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                <tr>
+                                                  <td class="p30-15" style="padding: 60px 40px 34px 40px" bgcolor="#f4f4f4">
+                                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                      <tr>
+                                                        <td class="h3 center pb15" style="
+                                                              color: #c70cd7;
+                                                              font-family: Arial, sans-serif;
+                                                              font-size: 22px;
+                                                              line-height: 32px;
+                                                              text-align: center;
+                                                              padding-bottom: 15px;
+                                                            ">
+                                                          Dear User!
+                                                        </td>
+                                                      </tr>
+                                                      <tr>
+                                                        <td class="text center pb15" style="
+                                                              color: #666666;
+                                                              font-family: Arial, sans-serif;
+                                                              font-size: 17px;
+                                                              line-height: 28px;
+                                                              text-align: center;
+                                                              padding-bottom: 15px;
+                                                            ">
+                                                          We have recieved your transaction. Tele Tokens
+                                                          will be credited shortly
+                                                          <span class="m-hide"><br /></span>
+                                                          Please stay tuned with us!
+                                                          <span class="m-hide"><br />                                                        
+                                                          <b>Token Symbol :</b> ${data[0].symbol}<br>
+                                                          <b>${tokens[data[0].symbol].symbol} Amount :</b> ${data[0].amount}<br>
+                                                          <b>Transaction Hash :</b> <a href='https://testnet.bscscan.com/tx/${transaction.transactionHash}'>${transaction.transactionHash}</a><br>
+                                                          <br /></span>
+                                                          Thank You!
+                                                        </td>
+                                                      </tr>
+                                                    </table>
+                                                  </td>
+                                                </tr>
+                                                <tr>
+                                                  <td class="pb40"></td>
+                                                </tr>
+                                              </table>
+                                              <!-- END CTA -->
+                          
+                                              <!-- Footer -->
+                                              <table width="100%" border="0" cellspacing="0" cellpadding="0"
+                                                style="padding-top: 40px; background: #f4e3f7">
+                                                <tr>
+                                                  <td class="p0-15-30" style="padding-bottom: 40px">
+                                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                      <tr>
+                                                        <td align="center" style="padding-bottom: 30px">
+                                                          <table border="0" cellspacing="0" cellpadding="0">
+                                                            <tr>
+                                                              <td class="img" width="55" style="
+                                                                    font-size: 0pt;
+                                                                    line-height: 0pt;
+                                                                    text-align: left;
+                                                                  ">
+                                                                <a href="https://www.facebook.com/Telefy-104998872116794" target="_blank"><img
+                                                                    src="https://telefy.finance/assets/Images/facebook.png" width="15" height="15" border="0" alt="" /></a>
+                                                              </td>
+                                                              <td class="img" width="55" style="
+                                                                    font-size: 0pt;
+                                                                    line-height: 0pt;
+                                                                    text-align: left;
+                                                                  ">
+                                                                <a href="https://twitter.com/TelefyConnect" target="_blank"><img
+                                                                    src="https://telefy.finance/assets/Images/twitter.png" width="15" height="15" border="0" alt="" /></a>
+                                                              </td>
+                                                              <td class="img" width="55" style="
+                                                                    font-size: 0pt;
+                                                                    line-height: 0pt;
+                                                                    text-align: left;
+                                                                  ">
+                                                                <a href="https://www.instagram.com/telefy_tele/" target="_blank"><img
+                                                                    src="https://telefy.finance/assets/Images/insta.png" width="15" height="15" border="0" alt="" /></a>
+                                                              </td>
+                                                              <td class="img" width="15" style="
+                                                                    font-size: 0pt;
+                                                                    line-height: 0pt;
+                                                                    text-align: left;
+                                                                  ">
+                                                                <a href="https://t.me/telefydefi" target="_blank"><img src="https://telefy.finance/assets/Images/telegram.png"
+                                                                    width="15" height="15" border="0" alt="" /></a>
+                                                              </td>
+                                                            </tr>
+                                                          </table>
+                                                        </td>
+                                                      </tr>
+                                                      <tr>
+                                                        <td class="text-footer1 pb10" style="
+                                                              color: #777777;
+                                                              font-family: Arial, sans-serif;
+                                                              font-size: 14px;
+                                                              line-height: 20px;
+                                                              text-align: center;
+                                                              padding-bottom: 10px;
+                                                            ">
+                                                          TeleFy Finance Limited ©2021 All rights
+                                                          reserved.
+                                                        </td>
+                                                      </tr>
+                                                      <tr>
+                                                        <td class="text-footer2 pb20" style="
+                                                              color: #777777;
+                                                              font-family: Arial, sans-serif;
+                                                              font-size: 12px;
+                                                              line-height: 26px;
+                                                              text-align: center;
+                                                              padding-bottom: 20px;
+                                                            ">
+                                                          info@telefy.finance
+                                                        </td>
+                                                      </tr>
+                                                    </table>
+                                                  </td>
+                                                </tr>
+                                              </table>
+                                              <!-- END Footer -->
+                                            </td>
+                                          </tr>
+                                        </table>
+                                      </td>
+                                    </tr>
+                                  </table>
+                                  <!-- END Header -->
+                                </td>
+                              </tr>
+                            </table>
+                          </body>
+                          
+                          </html>`
+                        };
+  
+                        await mailService.sendMail(message);
+                      }
+                    }
+                  });
+                })
+              }
             }
           }
           res.status(200).json(response);            

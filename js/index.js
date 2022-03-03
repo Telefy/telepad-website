@@ -3,8 +3,8 @@ const initialize = async () => {
   let provider;
   let chainId;
   let toAddress = "0xC22aB573D17632CcDc358744E4D6C7ca570e58CE";
-  let baseUrl = "http://telepadapi.telefy.finance";
-  let supportChainId = '0x4';
+  let baseUrl = "http://localhost:5000";
+  let supportChainId = ['0x4','0x61'];
 
   document.getElementById("checkMetaInstall").onclick = checkMetaInstall;
   document
@@ -14,9 +14,7 @@ const initialize = async () => {
     .getElementById("checkMetaInstall")
     .setAttribute("data-bs-target", "#walletModal");
   document.getElementById("accountInfo").setAttribute("hidden", true);
-  if (window.ethereum) {
-    provider = new ethers.providers.Web3Provider(window.ethereum);
-  }
+
 
 
   async function connectwallet() {
@@ -33,6 +31,7 @@ const initialize = async () => {
         method: "eth_chainId",
       });
       showChainId(chainId, account);
+      showTokenS(chainId);
       if (account && account.length > 0) {
         document
           .getElementById("checkMetaInstall")
@@ -53,6 +52,18 @@ const initialize = async () => {
       $("#accountInfo").attr("hidden", true);
       $("#accountInfo").hide();
       onboarding.startOnboarding();
+    }
+  }
+
+
+  async function showTokenS(chainId) {
+    $("#tokenCoin option").remove();
+    if (chainId == "0x4") {
+      $("#tokenCoin").append('<option value="">--</option><option value="WETH">WETH</option><option value="USDC">USDC</option><option value="DAI">DAI</option>')
+    } else if (chainId == "0x61") {
+      $("#tokenCoin").append('<option value="">--</option><option value="BNB">BNB</option><option value="BUSD">BUSD</option>')
+    } else {
+      $("#tokenCoin").append('<option value="">--</option>')
     }
   }
 
@@ -79,7 +90,9 @@ const initialize = async () => {
     chainId = await window.ethereum.request({
       method: "eth_chainId",
     });
+    console.log(chainId,"---network----")
     showChainId(chainId, account);
+    showTokenS(chainId);
   };
   const isMetaMaskConnect = async () => {
     const connectivity = await window.ethereum.request({
@@ -111,10 +124,15 @@ const initialize = async () => {
   if(window.ethereum){
 
     window.ethereum.on("chainChanged", (chain) => {
-      console.log(chain);
+      console.log(chain,"---chanid");
       chainId = chain;
       showChainId(chain, account);
-      if (chain == supportChainId) {
+      showTokenS(chainId);
+      $("#minContent").text("")
+      $("#maxContent").text("")
+      $("#tokenCoin").trigger("change");
+      $("#tvalue").val("");
+      if (supportChainId.indexOf(chain) != -1) {
         $("#connectNetwork").text("");
       }
     });
@@ -175,6 +193,8 @@ const initialize = async () => {
       $("#chainId").text("Rinkeby");
     } else if (id == "0x5") {
       $("#chainId").text("Goerli");
+    } else if (id == "0x61") {
+      $("#chainId").text("Binance Test");
     }
   };
 
@@ -742,65 +762,85 @@ const initialize = async () => {
         type: "function",
       },
     ];
-    console.log(String(data.data.token), "--token data");
-    let contract = new ethers.Contract(
-      String(data.data.token),
-      abi,
-      provider.getSigner()
-    );
+
     let amount = ethers.utils.parseUnits(values.amount, data.data.decimal);
-    console.log(amount, "---amountt---");
-    let tx = contract
+
+    let provider = new Web3(window.ethereum);
+    let contract = new provider.eth.Contract(abi, String(data.data.token));
+    contract.methods
       .transfer(toAddress, amount)
-      .then((res) => {
-        console.log(res);
-        let updateData = {
-          status: "SUBMITTED",
-          transcationId: res.hash,
-          error_msg: "",
-        };
-        $.ajax({
-          type: "PUT",
-          url: `${baseUrl}/entries/${data.data.id}`,
-          data: updateData,
-          success: function (data) {
-            Swal.fire({
-              title:
-                "Tranascation Successfully Submitted, Shortly You`ll Receive Mail",
-              icon: "info",
-              confirmButtonText: "Ok",
-            }).then((result) => {
-              if (result["isConfirmed"]) {
-                window.location.reload();
-              }
-            });
-          },
-        });
-        // provider.once(res.hash, (transaction) => {})
+      .send({
+        from: account[0],
       })
-      .catch((err) => {
-        console.log(err);
-        let updateData = {
+      .on("transactionHash", (res) => {
+        console.log(res, "--", chainId, "---chainId");
+        let postData = {
+          status: "SUBMITTED",
+          transcationId: res,
+          error_msg: "",
+          id: data.data.id,
+        };
+        if (chainId == "0x61") {
+          transcationUpate(postData, "BINANCE");
+        } else {
+          transcationUpate(postData, "ETHEREUM");
+        }
+      })
+      .on("error", (err) => {
+        console.log(err, "---errr---");
+
+        let postData = {
           status: "REJECTED",
           transcationId: "",
           error_msg: err.message,
+          id: data.data.id,
         };
-        $.ajax({
-          type: "PUT",
-          url: `${baseUrl}/entries/${data.data.id}`,
-          data: updateData,
-          success: function (data) {
-            Swal.fire({
-              title: "Tranascation Rejected",
-              icon: "error",
-              confirmButtonText: "Ok",
-            }).then((result) => {
-              if (result["isConfirmed"]) {
+        if (chainId == "0x61") {
+          transcationUpate(postData, "BINANCE");
+        } else {
+          transcationUpate(postData, "ETHEREUM");
+        }
+      })
+      .then((result) => {
+        console.log(result, "--jconfig");
+      });
+  }
+
+  async function transcationUpate(data,type){
+    let updateData = {
+        status: data.status,
+        transcationId: data.transcationId,
+        error_msg: data.error_msg,
+        network: type
+      };
+      let title;
+      let icon;
+      if(data.status == "SUBMITTED"){
+        title = "Tranascation submitted successfully, You will get e-mail once transaction succeed";
+        icon = "info"
+      } else {
+        title = "Tranascation rejected from wallet";
+        // title = "please check you have imported the token in your wallet and try again";
+        icon = "error"
+        $('#buynow').attr('disabled', false)
+      }
+      $.ajax({
+        type: "PUT",
+        url: `${baseUrl}/entries/${data.id}`,
+        data: updateData,
+        success: function (data) {
+          Swal.fire({
+            title: title,
+            icon: icon,
+            confirmButtonText: "Ok",
+          }).then((result) => {
+            if (result["isConfirmed"]) {
+              if(icon == "info"){                
                 window.location.reload();
               }
-            });
-          },
-        });
+            }
+          });
+        },
       });
   }
 
@@ -821,6 +861,27 @@ const initialize = async () => {
     $("#tokenCoin").change(function (event) {
       if (event.target.value) {
         $("#tokenLable").text(`${event.target.value} Amount`);
+
+        if(event.target.value == "USDC"){
+          $("#minContent").text(`500 ${event.target.value}`);  
+          $("#maxContent").text(`5000 ${event.target.value}`);  
+        } else if(event.target.value == "ETH"){
+          
+          $("#minContent").text(`0.02 ${event.target.value}`);  
+          $("#maxContent").text(`2 ${event.target.value}`);
+        } else if(event.target.value == "WETH"){
+          
+          $("#minContent").text(`0.02 ${event.target.value}`);  
+          $("#maxContent").text(`2 ${event.target.value}`);
+        } else if(event.target.value == "BUSD"){
+          
+          $("#minContent").text(`500 ${event.target.value}`);  
+          $("#maxContent").text(`5000 ${event.target.value}`);
+        } else if(event.target.value == "BNB"){
+          
+          $("#minContent").text(`1 ${event.target.value}`);  
+          $("#maxContent").text(`20 ${event.target.value}`);
+        }
       } else {
         $("#tokenLable").text(`Token Amount`);
       }
@@ -861,7 +922,7 @@ const initialize = async () => {
       submitHandler: function (form) {
         if (account && account.length > 0) {
           console.log(chainId, "---");
-          if (chainId == supportChainId) {
+          if (supportChainId.indexOf(chainId) != -1) {
             var postData = {
               email: $("#email").val(),
               telegram_username: $("#tusername").val(),
@@ -870,6 +931,7 @@ const initialize = async () => {
               amount: $("#tvalue").val(),
             };
             console.log(postData, "---post");
+            $('#buynow').attr('disabled', true)
             $.ajax({
               type: "POST",
               url: `${baseUrl}/entries`,
@@ -879,7 +941,7 @@ const initialize = async () => {
               },
             });
           } else {
-            $("#connectNetwork").text("Only Etherum Network is Supported!");
+            $("#connectNetwork").text("Please Select Ethereum Or Binance in your Metamask");
           }
         } else {
           $("#connectBuynow").text("Please Connect Metamask Wallet To Proceed!");
