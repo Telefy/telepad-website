@@ -431,10 +431,11 @@ h6 {
   transition: 0.5s;
   margin-top: 30px;
   color: #fff;
-  background: linear-gradient(45deg, #9f19ab 0%, #ff63ce 100%);
+  border: 3px solid #af37b7;
+  background: linear-gradient(180deg, #9f19ab 0%, #ff63ce 100%);
 }
 #hero .btn-get-started:hover {
-  background: linear-gradient(180deg, #9f19ab 0%, #ff63ce 100%);
+  background: linear-gradient(45deg, #9f19ab 0%, #ff63ce 100%);
 }
 #hero .animated {
   animation: up-down 2s ease-in-out infinite alternate-reverse both;
@@ -1602,6 +1603,34 @@ section {
   font-size: 12px;
   /* words */
 }
+
+.form-timer > .simply-countdown > .simply-section > div {
+  /* countdown block inner div */
+  display: table-cell;
+  vertical-align: middle;
+  height: 50px !important;
+  width: 50px !important;
+}
+.form-timer > .simply-countdown > .simply-section {
+  width: 50px !important;
+  height: 50px !important;
+}
+
+.form-timer > .simply-countdown > .simply-section .simply-amount {
+  font-size: 20px !important;
+}
+
+.form-timer > .simply-countdown > .simply-section .simply-word {
+  font-size: 8px !important;
+}
+
+.form-timer > .simply-countdown {
+  margin-bottom: 1em !important;
+}
+
+.form-timer {
+  text-align: center;
+}
 .timer-box {
   position: relative;
   min-width: 30rem;
@@ -2268,4 +2297,9 @@ sup {
   vertical-align: middle;
   color: #fff;
   letter-spacing: 0.2px;
+}
+video {
+  width: 100%;
+  height: auto;
+  border: 4px solid #9f19ab;
 }
