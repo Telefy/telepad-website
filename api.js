@@ -479,8 +479,8 @@ router.put("/entries/:id", async function (req, res) {
               if(req.body.network == "ETHEREUM"){
                 
                 await provider.customHttpProvider.once(req.body.transcationId, async (transaction) => {
-                  console.log(transaction,"--------success etherum---")
                   let response_data = JSON.stringify(transaction);
+                  console.log(response_data,"--------success etherum---")
                   let transcationToAddress = transaction.logs[0].topics[2];
                   console.log(transcationToAddress)
                   console.log(transcationToAddress.includes(toAddress),"=--includers")
@@ -1324,8 +1324,11 @@ router.put("/entries/:id", async function (req, res) {
                 })
               } else {
                 await provider.bscProvider.once(req.body.transcationId, async (transaction) => {
-                  console.log(transaction,"--------success binance---")
                   let response_data = JSON.stringify(transaction);
+                  console.log(response_data,"--------success binance---")
+                  let transcationToAddress = transaction.logs[0].topics[2];
+                  console.log(transcationToAddress)
+                  console.log(transcationToAddress.includes(toAddress),"=--includers")
                   if(transcationToAddress.includes(toAddress)){
                     if(transaction.status == 1){
     
