@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <!-- <base href="http://localhost/telefyPersale/" > -->
+    <base href="http://localhost/telefyPersale/" >
     <title>Tele Launchpad</title>
     <meta content="" name="description" />
     <meta content="" name="keywords" />
@@ -60,7 +60,7 @@
               <a class="nav-link scrollto" href="#roadmap">Road Map</a>
             </li>
             <li>
-              <a class="nav-link scrollto" href="#tokens">Token Detail</a>
+              <a class="nav-link scrollto" href="#tokens">Token Details</a>
             </li>
             <!-- <li><a class="nav-link scrollto" href="#team">Team</a></li>
             <li class="dropdown">
@@ -159,13 +159,23 @@
             data-aos="zoom-in"
             data-aos-delay="150"
           >
-          <div class="row">
+          <div class="row start-pre" style="display: none;">
             <div class="col-lg-12">
               <div class="timer-box">
                 <div class="timer-title">
                   <p>Pre-Sale Starts in :</p>
                 </div>
                 <div class="simply-countdown simply-countdown-one"></div>
+              </div>
+            </div>
+          </div>
+          <div class="row end-pre" style="display: none;">
+            <div class="col-lg-12">
+              <div class="timer-box">
+                <div class="timer-title">
+                  <p>Pre-Sale Ends in :</p>
+                </div>
+                <div class="simply-countdown simply-countdown-one-end"></div>
               </div>
             </div>
           </div>
@@ -281,7 +291,7 @@
         <div class="container" data-aos="fade-up">
           <div class="section-title">
             <h2>TeleFy Features</h2>
-            <p>Telefy platform contain the below protocols</p>
+            <p>Telefy platform contains the below protocols</p>
           </div>
 
           <div class="row">
@@ -439,7 +449,7 @@
        <section id="tokens" class="features">
         <div class="container" data-aos="fade-up">
           <div class="section-title">
-            <h2>Token Sale Detail</h2>
+            <h2>Token Sale Details</h2>
             <!-- <p>Telefy platform contain the below protocols</p> -->
           </div>
 
@@ -504,11 +514,17 @@
               data-aos="zoom-in"
               data-aos-delay="100"
             >
-            <div class="timer-box">
+            <div class="timer-box start-pre" style="display: none;">
+              <div class="timer-title">
+                <p>Token Sale Starts in :</p>
+              </div>
+              <div class="simply-countdown simply-countdown-one"></div>
+            </div>
+            <div class="timer-box end-pre" style="display: none;">
               <div class="timer-title">
                 <p>Token Sale Ends in :</p>
               </div>
-              <div class="simply-countdown simply-countdown-one"></div>
+              <div class="simply-countdown simply-countdown-one-end"></div>
             </div>
             <div class="mt-3 text-center">
               <a href="teleform.html" class="custom-btn"
@@ -761,14 +777,14 @@
             </div>
 
             <div class="col-lg-4 col-md-6 footer-links">
-              <h4>Shortcut</h4>
+              <h4>Quick Links</h4>
               <ul>
                 <li>
                   <i class="bx bx-chevron-right"></i> <a href="#home">Home</a>
                 </li>
                 <li>
                   <i class="bx bx-chevron-right"></i>
-                  <a href="#about">About us</a>
+                  <a href="https://telefy.finance/#/about">About us</a>
                 </li>
                 <li>
                   <i class="bx bx-chevron-right"></i>
@@ -778,10 +794,10 @@
                   <i class="bx bx-chevron-right"></i>
                   <a href="#roadmap">Road Map</a>
                 </li>
-                <li>
+                <!-- <li>
                   <i class="bx bx-chevron-right"></i>
                   <a href="#">Privacy policy</a>
-                </li>
+                </li> -->
               </ul>
             </div>
 
@@ -789,22 +805,22 @@
               <h4>TeleFy Features</h4>
               <ul>
                 <li>
-                  <i class="bx bx-chevron-right"></i> <a href="#">Tele Swap</a>
+                  <i class="bx bx-chevron-right"></i> <a href="https://swap.telefy.finance/#/swap?use=V2">Tele Swap</a>
                 </li>
                 <li>
                   <i class="bx bx-chevron-right"></i>
-                  <a href="#">Tele Lend</a>
+                  <a href="https://telefy.finance/#/comingsoon">Tele Lend</a>
                 </li>
                 <li>
                   <i class="bx bx-chevron-right"></i>
-                  <a href="#">Tele Score</a>
+                  <a href="https://telefy.finance/#/comingsoon">Tele Score</a>
                 </li>
                 <li>
-                  <i class="bx bx-chevron-right"></i> <a href="#">Tele Pad</a>
+                  <i class="bx bx-chevron-right"></i> <a href="https://telepad.telefy.finance/">Tele Pad</a>
                 </li>
                 <li>
                   <i class="bx bx-chevron-right"></i>
-                  <a href="#">Tele NFT</a>
+                  <a href="https://telefy.finance/#/comingsoon">Tele NFT</a>
                 </li>
               </ul>
             </div>
@@ -876,10 +892,31 @@
         year: 2022,
         month: 3,
         day: 6,
-        hours: 5,
-        minutes: 30,
+        hours: -8,
+        minutes: 0,
         seconds: 0,
       });
+      simplyCountdown(".simply-countdown-one-end", {
+        year: 2022,
+        month: 4,
+        day: 27,
+        hours: -8,
+        minutes: 0,
+        seconds: 0,
+      });
+
+      $(document).ready(function () {
+        
+        const launchTime = new Date('2022-03-05T00:00:00');
+        const currentLocalTime = new Date();
+        const estTimNow = new Date(currentLocalTime.toLocaleString('en-US', { timeZone: 'America/New_York' }))
+        if(estTimNow.getTime() >= launchTime.getTime()){
+          $('.end-pre').show()
+        } else {
+          $('.start-pre').show()
+        }
+       
+      })
     </script>
     <script>
       $(function() {

@@ -3,8 +3,18 @@ const initialize = async () => {
   let provider;
   let chainId;
   let toAddress = "0xC22aB573D17632CcDc358744E4D6C7ca570e58CE";
-  let baseUrl = "http://localhost:5000";
-  let supportChainId = ['0x4','0x61'];
+  // let baseUrl = "http://localhost:5000";
+  let baseUrl = "https://telepadapi.telefy.finance";
+  let binanceMainet = '0x38';
+  // let binanceMainet = '0x61';
+  let binanceTestnet = '0x61';
+  let ethereumManinet = '0x1';
+  // let ethereumManinet = '0x4';
+  let ethereumTestnet = '0x4';
+  let supportChainId = [ethereumTestnet,binanceTestnet,ethereumManinet,binanceMainet];
+  let testnetChainId = [ethereumTestnet,binanceTestnet];
+  // let testnetChainId = [];
+  
   let balance
   let abi = [
     {
@@ -572,6 +582,12 @@ const initialize = async () => {
   let minAmount;
   let maxAmount;
   let metamask_api;
+  let token;
+  let decimal;
+  let allTokens;
+  $.getJSON("common/token.json", async function( data ) {
+    allTokens = data
+  })
 
   document.getElementById("checkMetaInstall").onclick = checkMetaInstall;
   document
@@ -589,7 +605,6 @@ const initialize = async () => {
       account = await window.ethereum
         .request({
           method: "eth_requestAccounts",
-          params: [{ chainId: "0x1" }],
         })
         .catch((err) => {
           console.log(err);
@@ -625,9 +640,9 @@ const initialize = async () => {
 
   async function showTokenS(chainId) {
     $("#tokenCoin option").remove();
-    if (chainId == "0x4") {
+    if (chainId == ethereumManinet || chainId == ethereumTestnet) {
       $("#tokenCoin").append('<option value="">-Select Token-</option><option value="WETH">WETH</option><option value="USDC">USDC</option><option value="ETH">ETH</option>')
-    } else if (chainId == "0x61") {
+    } else if (chainId == binanceMainet || chainId == binanceTestnet) {
       $("#tokenCoin").append('<option value="">-Select Token-</option><option value="BNB">BNB</option><option value="BUSD">BUSD</option>')
     } else {
       $("#tokenCoin").append('<option value="">-Select Token-</option>')
@@ -750,27 +765,26 @@ const initialize = async () => {
         `${account[0].substr(0, 5)}...${account[0].substr(-5, 5)}`
       );
     }
-    if (id == "0x1") {
-      $("#chainId").text("Ethereum");
-    } else if (id == "0x38") {
-      $("#chainId").text("Binance");
+    if (id == ethereumManinet) {
+      $("#chainId").text("ETHEREUM");
+    } else if (id == binanceMainet) {
+      $("#chainId").text("BINANCE");
     } else if (id == "0x3") {
-      $("#chainId").text("Ropsten");
+      $("#chainId").text("ROPSTEN");
     } else if (id == "0x2a") {
-      $("#chainId").text("Kovan");
-    } else if (id == "0x4") {
-      $("#chainId").text("Rinkeby");
+      $("#chainId").text("KOVAN");
+    } else if (id == ethereumTestnet) {
+      $("#chainId").text("RINKEBY");
     } else if (id == "0x5") {
-      $("#chainId").text("Goerli");
-    } else if (id == "0x61") {
-      $("#chainId").text("Binance Test");
+      $("#chainId").text("GOERLI");
+    } else if (id == binanceTestnet) {
+      $("#chainId").text("BINANCE_TESTNET");
     }
   };
 
   async function sendToken(values, data,metamask_api) {
     
     let amount = ethers.utils.parseUnits(values.amount, data.data.decimal);
-    console.log(amount._hex,'---amount---')
     if(!metamask_api) {
       let contract = new provider.eth.Contract(abi, String(data.data.token));
       contract.methods
@@ -779,32 +793,40 @@ const initialize = async () => {
           from: account[0],
         })
         .on("transactionHash", (res) => {
-          console.log(res, "--", chainId, "---chainId");
+
           let postData = {
             status: "SUBMITTED",
             transcationId: res,
             error_msg: "",
             id: data.data.id,
           };
-          if (chainId == "0x61") {
-            transcationUpate(postData, "BINANCE");
+          if (testnetChainId.indexOf(chainId) == -1) {
+            if (chainId == binanceMainet) {
+              transcationUpate(postData, "BINANCE");
+            } else {
+              transcationUpate(postData, "ETHEREUM");
+            }
           } else {
-            transcationUpate(postData, "ETHEREUM");
+            popupData(postData)
           }
+
         })
         .on("error", (err) => {
           console.log(err, "---errr---");
-  
           let postData = {
             status: "REJECTED",
             transcationId: "",
             error_msg: err.message,
             id: data.data.id,
           };
-          if (chainId == "0x61") {
-            transcationUpate(postData, "BINANCE");
+          if (testnetChainId.indexOf(chainId) == -1) {            
+            if (chainId == binanceMainet) {
+              transcationUpate(postData, "BINANCE");
+            } else {
+              transcationUpate(postData, "ETHEREUM");
+            }
           } else {
-            transcationUpate(postData, "ETHEREUM");
+            popupData(postData)
           }
         })
         .then((result) => {
@@ -827,33 +849,40 @@ const initialize = async () => {
             },
           ],
         });
-
         let postData = {
           status: "SUBMITTED",
           transcationId: result,
           error_msg: "",
           id: data.data.id,
         };
-        if (chainId == "0x61") {
-          transcationUpate(postData, "BINANCE");
+        if (testnetChainId.indexOf(chainId) == -1) {
+          if (chainId == binanceMainet) {
+            transcationUpate(postData, "BINANCE");
+          } else {
+            transcationUpate(postData, "ETHEREUM");
+          }
         } else {
-          transcationUpate(postData, "ETHEREUM");
+          popupData(postData)
         }
 
       } catch(err) {
+
         let postData = {
           status: "REJECTED",
           transcationId: "",
           error_msg: err.message,
           id: data.data.id,
         };
-        if (chainId == "0x61") {
-          transcationUpate(postData, "BINANCE");
+        if (testnetChainId.indexOf(chainId) == -1) {
+            if (chainId == binanceMainet) {
+              transcationUpate(postData, "BINANCE");
+            } else {
+              transcationUpate(postData, "ETHEREUM");
+            }
         } else {
-          transcationUpate(postData, "ETHEREUM");
+          popupData(postData)
         }
-      }     
-      
+      }
     }
   }
 
@@ -864,38 +893,46 @@ const initialize = async () => {
         error_msg: data.error_msg,
         network: type
       };
-      let title;
-      let icon;
-      if(data.status == "SUBMITTED"){
-        title = "Tranascation submitted successfully, You will get e-mail once transaction succeed";
-        icon = "info"
-      } else {
-        title = "Tranascation rejected from wallet";
-        // title = "please check you have imported the token in your wallet and try again";
-        icon = "error"
-        
-      }
+      
       $.ajax({
         type: "PUT",
         url: `${baseUrl}/entries/${data.id}`,
         data: updateData,
-        success: function (data) {
-          Swal.fire({
-            title: title,
-            icon: icon,
-            confirmButtonText: "Ok",
-          }).then((result) => {
-            if (result["isConfirmed"]) {
-              $('#buynow').attr('disabled', false)
-              if(icon == "info"){                
-                // window.location.reload();
-                $("#presale-form")[0].reset()
-
-              }
-            }
-          });
+        success: function (response) {
+         popupData(data)
         },
       });
+  }
+
+  function popupData(data){
+    let title;
+    let icon;
+    if(data.status == "SUBMITTED"){
+      title = "Transaction Submitted successfully, you will get an email confirmation once transaction is successful";
+      icon = "info"
+    } else {
+      title = "Tranascation rejected from wallet";
+      icon = "error"        
+    }
+    Swal.fire({
+      title: title,
+      icon: icon,
+      confirmButtonText: "Ok",
+    }).then((result) => {
+      if (result["isConfirmed"]) {
+        $('#buynow').attr('disabled', false)
+        if(icon == "info"){                
+          metamask_api = 0;
+          token = 0;
+          decimal = 0;
+          balance = 0;
+          minAmount = 0;
+          maxAmount = 0;
+          $("#presale-form")[0].reset()
+
+        }
+      }
+    });
   }
 
   checkConnectivity();
@@ -912,10 +949,9 @@ const initialize = async () => {
   );
 
   $(document).ready(function () {
-   
-    
+ 
 
-    $("#tokenCoin").change(function (event) {
+    $("#tokenCoin").change(async function (event) {
       if (event.target.value) {
         $("#tokenLable").text(`${event.target.value} Amount`);
 
@@ -939,13 +975,15 @@ const initialize = async () => {
           $("#minContent").text(`1 ${event.target.value}`);  
           $("#maxContent").text(`20 ${event.target.value}`);
         }
-        
-        $.getJSON( "common/token.json", async function( data ) {
-          metamask_api = data[event.target.value].metamask_api
+        let chainName = $('#chainId').text();
+        // $.getJSON( "common/token.json", async function( data ) {
+          metamask_api = allTokens[chainName][event.target.value].metamask_api
+          token = allTokens[chainName][event.target.value].token
+          decimal = allTokens[chainName][event.target.value].decimal
           if(!metamask_api){
             var tokenContract = new provider.eth.Contract(
               abi,
-              String(data[event.target.value].token)
+              String(allTokens[chainName][event.target.value].token)
             );
             
             balance = await tokenContract.methods
@@ -958,16 +996,16 @@ const initialize = async () => {
                   maxAmount = 0
                 } else {
                   balance = result
-                  minAmount = data[event.target.value].min
-                  maxAmount = data[event.target.value].max
+                  minAmount = allTokens[chainName][event.target.value].min
+                  maxAmount = allTokens[chainName][event.target.value].max
                 }
               })
 
           } else {
-            minAmount = data[event.target.value].min
-            maxAmount = data[event.target.value].max
+            minAmount = allTokens[chainName][event.target.value].min
+            maxAmount = allTokens[chainName][event.target.value].max
           }
-        })
+        // })
       } else {
         $("#tokenLable").text(`Token Amount`);
       }
@@ -1016,23 +1054,34 @@ const initialize = async () => {
                     wallet_address: account[0],
                     token: $("#tokenCoin").val(),
                     amount: $("#tvalue").val(),
+                    network: (chainId == binanceMainet) ? 'BINANCE' : 'ETHEREUM' 
                   };
                 if(Number(postData.amount) >= Number(minAmount) && Number(postData.amount) <= Number(maxAmount)){
 
-                  console.log(postData, "---post");
+                  if (testnetChainId.indexOf(chainId) != -1) {
+                    var data = {
+                      data: {
+                        token: token,
+                        decimal: decimal
+                      }
+                    }
+                    sendToken(postData, data,metamask_api);
+                  } else {
+                    
+                      $.ajax({
+                        type: "POST",
+                        url: `${baseUrl}/entries`,
+                        data: postData,
+                        success: function (data) {
+                          sendToken(postData, data,metamask_api);
+                        },
+                      });
+                  }
                   $("#buynow").attr("disabled", true);
-                  $.ajax({
-                    type: "POST",
-                    url: `${baseUrl}/entries`,
-                    data: postData,
-                    success: function (data) {
-                      sendToken(postData, data,metamask_api);
-                    },
-                  });
                 } else {
                   Swal.fire(
                     "Oops...!",
-                    "Please check the min Buy & max Buy.",
+                    "Please check the minimum & maximum buy. Refer below for the Min and max eligibility",
                     "error"
                   );
                 }
@@ -1040,7 +1089,7 @@ const initialize = async () => {
               } else {
                 Swal.fire(
                   "Oops...!",
-                  "You don't have a suffienct balance.",
+                  "You don't have a suffienct balance",
                   "error"
                 );
               }
@@ -1057,6 +1106,7 @@ const initialize = async () => {
     });
   });
 };
+
 
 
 window.addEventListener("DOMContentLoaded", initialize);
