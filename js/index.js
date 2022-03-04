@@ -968,11 +968,11 @@ const initialize = async () => {
           $("#maxContent").text(`5000 ${event.target.value}`);  
         } else if(event.target.value == "ETH"){
           
-          $("#minContent").text(`0.02 ${event.target.value}`);  
+          $("#minContent").text(`0.2 ${event.target.value}`);  
           $("#maxContent").text(`2 ${event.target.value}`);
         } else if(event.target.value == "WETH"){
           
-          $("#minContent").text(`0.02 ${event.target.value}`);  
+          $("#minContent").text(`0.2 ${event.target.value}`);  
           $("#maxContent").text(`2 ${event.target.value}`);
         } else if(event.target.value == "BUSD"){
           
