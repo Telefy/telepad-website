@@ -2,7 +2,7 @@ const initialize = async () => {
   let account;
   let provider;
   let chainId;
-  let toAddress = "0xC22aB573D17632CcDc358744E4D6C7ca570e58CE";
+  let toAddress = "0x1cD0d9462181648d02F73f646F22EC1b1Cb7EBd0";
   // let baseUrl = "http://localhost:5000";
   let baseUrl = "https://telepadapi.telefy.finance";
   let binanceMainet = '0x38';
@@ -721,7 +721,8 @@ const initialize = async () => {
       }
     });
 
-    window.ethereum.on("accountsChanged", (newAccounts) => {
+    window.ethereum.on("accountsChanged", async (newAccounts) => {
+      console.log(newAccounts,"----")
       window.ethereum
         .request({
           method: "eth_getBlockByNumber",
@@ -744,6 +745,10 @@ const initialize = async () => {
         account = "";
         $("#connectNetwork").text("");
       } else {
+        const checkAccount = await window.ethereum.request({
+          method: "eth_accounts",
+        });
+        account = checkAccount;
         document
           .getElementById("checkMetaInstall")
           .removeEventListener("onclick", checkMetaInstall);
@@ -755,6 +760,9 @@ const initialize = async () => {
           .removeAttribute("data-bs-target");
         $("#checkMetaInstall").hide();
         $("#accountInfo").attr("hidden", false);
+        $("#accountId").text(
+          `${account[0].substr(0, 5)}...${account[0].substr(-5, 5)}`
+        );
       }
     });
   }
@@ -1089,7 +1097,7 @@ const initialize = async () => {
               } else {
                 Swal.fire(
                   "Oops...!",
-                  "You don't have a suffienct balance",
+                  "You don't have a sufficient balance",
                   "error"
                 );
               }
