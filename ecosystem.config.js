@@ -1,7 +1,7 @@
 module.exports = {
   apps : [
       {
-        name: "myapp",
+        name: "telepadApi",
         script: "./api.js",
         watch: true,
         env: {
