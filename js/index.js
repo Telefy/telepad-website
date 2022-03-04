@@ -983,36 +983,9 @@ const initialize = async () => {
           $("#minContent").text(`1 ${event.target.value}`);  
           $("#maxContent").text(`20 ${event.target.value}`);
         }
-        let chainName = $('#chainId').text();
+        
         // $.getJSON( "common/token.json", async function( data ) {
-          metamask_api = allTokens[chainName][event.target.value].metamask_api
-          token = allTokens[chainName][event.target.value].token
-          decimal = allTokens[chainName][event.target.value].decimal
-          if(!metamask_api){
-            var tokenContract = new provider.eth.Contract(
-              abi,
-              String(allTokens[chainName][event.target.value].token)
-            );
-            
-            balance = await tokenContract.methods
-              .balanceOf(String(account[0]))
-              .call(function(error, result){
-                console.log(error,"--error")
-                if(error){
-                  balance = 0;
-                  minAmount = 0
-                  maxAmount = 0
-                } else {
-                  balance = result
-                  minAmount = allTokens[chainName][event.target.value].min
-                  maxAmount = allTokens[chainName][event.target.value].max
-                }
-              })
-
-          } else {
-            minAmount = allTokens[chainName][event.target.value].min
-            maxAmount = allTokens[chainName][event.target.value].max
-          }
+          
         // })
       } else {
         $("#tokenLable").text(`Token Amount`);
@@ -1054,53 +1027,46 @@ const initialize = async () => {
       submitHandler: function (form) {
         if (account && account.length > 0) {
           if (supportChainId.indexOf(chainId) != -1) {
-           
-              if((balance && balance > 0) || metamask_api == 1){
-                  var postData = {
-                    email: $("#email").val(),
-                    telegram_username: $("#tusername").val(),
-                    wallet_address: account[0],
-                    token: $("#tokenCoin").val(),
-                    amount: $("#tvalue").val(),
-                    network: (chainId == binanceMainet) ? 'BINANCE' : 'ETHEREUM' 
-                  };
-                if(Number(postData.amount) >= Number(minAmount) && Number(postData.amount) <= Number(maxAmount)){
+            var postData = {
+              email: $("#email").val(),
+              telegram_username: $("#tusername").val(),
+              wallet_address: account[0],
+              token: $("#tokenCoin").val(),
+              amount: $("#tvalue").val(),
+              network: (chainId == binanceMainet) ? 'BINANCE' : 'ETHEREUM' 
+            };
+            let chainName = $('#chainId').text();
+            metamask_api = allTokens[chainName][postData.token].metamask_api
+            token = allTokens[chainName][postData.token].token
+            decimal = allTokens[chainName][postData.token].decimal
+            if(!metamask_api){
+              var tokenContract = new provider.eth.Contract(
+                abi,
+                String(allTokens[chainName][postData.token].token)
+              );
+              
+              tokenContract.methods
+                .balanceOf(String(account[0]))
+                .call().then((res)=>{
+                  console.log(res,"---ress")
+                  balance = res
+                  minAmount = allTokens[chainName][postData.token].min
+                  maxAmount = allTokens[chainName][postData.token].max
+                  getBalancewithAjax(postData,balance,metamask_api,chainId,testnetChainId,token,decimal,minAmount,maxAmount,baseUrl,sendToken,Swal)
+                }).catch((error)=>{
+                    console.log(error,"---er")
+                    balance = 0;
+                    minAmount = 0
+                    maxAmount = 0
+                    getBalancewithAjax(postData,balance,metamask_api,chainId,testnetChainId,token,decimal,minAmount,maxAmount,baseUrl,sendToken,Swal)
+                })
 
-                  if (testnetChainId.indexOf(chainId) != -1) {
-                    var data = {
-                      data: {
-                        token: token,
-                        decimal: decimal
-                      }
-                    }
-                    sendToken(postData, data,metamask_api);
-                  } else {
-                    
-                      $.ajax({
-                        type: "POST",
-                        url: `${baseUrl}/entries`,
-                        data: postData,
-                        success: function (data) {
-                          sendToken(postData, data,metamask_api);
-                        },
-                      });
-                  }
-                  $("#buynow").attr("disabled", true);
-                } else {
-                  Swal.fire(
-                    "Oops...!",
-                    "Please check the minimum & maximum buy. Refer below for the Min and max eligibility",
-                    "error"
-                  );
-                }
-                
-              } else {
-                Swal.fire(
-                  "Oops...!",
-                  "You don't have a sufficient balance",
-                  "error"
-                );
-              }
+            } else {
+              minAmount = allTokens[chainName][postData.token].min
+              maxAmount = allTokens[chainName][postData.token].max
+              getBalancewithAjax(postData,balance,metamask_api,chainId,testnetChainId,token,decimal,minAmount,maxAmount,baseUrl,sendToken,Swal)
+            }          
+              
 
           } else {
             $("#connectNetwork").text(
@@ -1115,6 +1081,48 @@ const initialize = async () => {
   });
 };
 
+
+function getBalancewithAjax(postData,balance,metamask_api,chainId,testnetChainId,token,decimal,minAmount,maxAmount,baseUrl,sendToken,Swal){
+  if((balance && balance > 0) || metamask_api == 1){
+                  
+    if(Number(postData.amount) >= Number(minAmount) && Number(postData.amount) <= Number(maxAmount)){
+
+      if (testnetChainId.indexOf(chainId) != -1) {
+        var data = {
+          data: {
+            token: token,
+            decimal: decimal
+          }
+        }
+        sendToken(postData, data,metamask_api);
+      } else {
+        
+          $.ajax({
+            type: "POST",
+            url: `${baseUrl}/entries`,
+            data: postData,
+            success: function (data) {
+              sendToken(postData, data,metamask_api);
+            },
+          });
+      }
+      $("#buynow").attr("disabled", true);
+    } else {
+      Swal.fire(
+        "Oops...!",
+        "Please check the minimum & maximum buy. Refer below for the Min and max eligibility",
+        "error"
+      );
+    }
+    
+  } else {
+    Swal.fire(
+      "Oops...!",
+      "You don't have a sufficient balance",
+      "error"
+    );
+  }
+}
 
 
 window.addEventListener("DOMContentLoaded", initialize);
