@@ -13,7 +13,8 @@ const provider = require("./library/provider");
 var con = mysql.createConnection({ 
   host: "127.0.0.1",
   user: "root",
-  password: "Sathish@123",
+  password: "8db7ybxaidi",
+  // password: "Sathish@123",
   database: "telefy",
 });
 
@@ -30,9 +31,9 @@ router.get("/", function (req, res) {
 router.post("/entries", async function (req, res) {
     let response = {};
     try {
-        let wei_amount = req.body.amount * 10 ** tokens[req.body.token].decimal;
-        var post = `('${req.body.email}','${req.body.telegram_username}','${req.body.wallet_address}','${tokens[req.body.token].token}','${req.body.amount}','${wei_amount}','${req.body.token}')`;
-        var sql = `INSERT INTO presale_entries (email,telegram_username,wallet_address,token,amount,wei_amount,symbol) values ${post}`;
+        let wei_amount = req.body.amount * 10 ** tokens[req.body.network][req.body.token].decimal;
+        var post = `('${req.body.email}','${req.body.telegram_username}','${req.body.wallet_address}','${tokens[req.body.network][req.body.token].token}','${req.body.amount}','${wei_amount}','${req.body.token}','${req.body.network}')`;
+        var sql = `INSERT INTO presale_entries (email,telegram_username,wallet_address,token,amount,wei_amount,symbol,network) values ${post}`;
         var query = await con.query(sql, post, function (err, result) {
           if (err) {
             response.data = err
@@ -40,8 +41,8 @@ router.post("/entries", async function (req, res) {
           } else {
             response.data = {
               "id": result.insertId,
-              "token": tokens[req.body.token].token,
-              "decimal": tokens[req.body.token].decimal
+              "token": tokens[req.body.network][req.body.token].token,
+              "decimal": tokens[req.body.network][req.body.token].decimal
             }
             response.status= "SUCCESS"
           }
@@ -56,7 +57,7 @@ router.post("/entries", async function (req, res) {
 });
 router.get("/mailSend", async function (req, res) {
   var message = {
-    from: "noreply.mazelon@gmail.com",
+    from: "info@telefy.finance",
     to: "sathish@mazelon.com",
     subject: "Trascation Completed",
     html: `<!DOCTYPE html
@@ -422,7 +423,7 @@ router.get("/mailSend", async function (req, res) {
                                                             text-align: center;
                                                             padding-bottom: 10px;
                                                           ">
-                                                        TeleFy Finance Limited ©2021 All rights
+                                                        TeleFy Finance Limited ©2022 All rights
                                                         reserved.
                                                       </td>
                                                     </tr>
@@ -495,11 +496,9 @@ router.put("/entries/:id", async function (req, res) {
                       if(data.length > 0){
                         console.log(data,"------")
                            var message = {
-                            from: "noreply.mazelon@gmail.com",
+                            from: "info@telefy.finance",
                             to: data[0].email,
                             subject: "Trascation Completed",
-                            // html: `<p>Hi Sir/Madam,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Your Transcation Successfully Completed,<BR>
-                            // <b>Transaction Hash :</b> <a href='https://rinkeby.etherscan.io/tx/${transaction.transactionHash}'>${transaction.transactionHash}</a><br>`
                             html: `<!DOCTYPE html
                             PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
                           <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml"
@@ -779,7 +778,7 @@ router.put("/entries/:id", async function (req, res) {
                                                               text-align: center;
                                                               padding-bottom: 15px;
                                                             ">
-                                                          Dear User!
+                                                          Dear Telefy User!
                                                         </td>
                                                       </tr>
                                                       <tr>
@@ -791,13 +790,12 @@ router.put("/entries/:id", async function (req, res) {
                                                               text-align: center;
                                                               padding-bottom: 15px;
                                                             ">
-                                                          We have recieved your transaction. Tele Tokens
-                                                          will be credited shortly
+                                                          We have recieved your transaction. TELE Tokens will be credited after the pre and private sales.
                                                           <span class="m-hide"><br /></span>
                                                           Please stay tuned with us!
                                                           <span class="m-hide"><br />                                                        
                                                           <b>Token Symbol :</b> ${data[0].symbol}<br>
-                                                          <b>${tokens[data[0].symbol].symbol} Amount :</b> ${data[0].amount}<br>
+                                                          <b>${tokens[data[0].network][data[0].symbol].symbol} Amount :</b> ${data[0].amount}<br>
                                                           <b>Transaction Hash :</b> <a href='https://rinkeby.etherscan.io/tx/${transaction.transactionHash}'>${transaction.transactionHash}</a><br>
                                                           <br /></span>
                                                           Thank You!
@@ -867,7 +865,7 @@ router.put("/entries/:id", async function (req, res) {
                                                               text-align: center;
                                                               padding-bottom: 10px;
                                                             ">
-                                                          TeleFy Finance Limited ©2021 All rights
+                                                          TeleFy Finance Limited ©2022 All rights
                                                           reserved.
                                                         </td>
                                                       </tr>
@@ -927,7 +925,7 @@ router.put("/entries/:id", async function (req, res) {
                       if(data.length > 0){
                         console.log(data,"------")
                            var message = {
-                            from: "noreply.mazelon@gmail.com",
+                            from: "info@telefy.finance",
                             to: data[0].email,
                             subject: "Trascation Completed",
                             html: `<!DOCTYPE html
@@ -1227,7 +1225,7 @@ router.put("/entries/:id", async function (req, res) {
                                                           Please stay tuned with us!
                                                           <span class="m-hide"><br />                                                        
                                                           <b>Token Symbol :</b> ${data[0].symbol}<br>
-                                                          <b>${tokens[data[0].symbol].symbol} Amount :</b> ${data[0].amount}<br>
+                                                          <b>${tokens[data[0].network][data[0].symbol].symbol} Amount :</b> ${data[0].amount}<br>
                                                           <b>Transaction Hash :</b> <a href='https://testnet.bscscan.com/tx/${transaction.transactionHash}'>${transaction.transactionHash}</a><br>
                                                           <br /></span>
                                                           Thank You!
@@ -1297,7 +1295,7 @@ router.put("/entries/:id", async function (req, res) {
                                                               text-align: center;
                                                               padding-bottom: 10px;
                                                             ">
-                                                          TeleFy Finance Limited ©2021 All rights
+                                                          TeleFy Finance Limited ©2022 All rights
                                                           reserved.
                                                         </td>
                                                       </tr>
