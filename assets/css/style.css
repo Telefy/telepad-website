@@ -2303,3 +2303,13 @@ video {
   height: auto;
   border: 4px solid #9f19ab;
 }
+
+.btn-gold {
+  background-image: linear-gradient(#a76f08, #d6bc04);
+  color: #fff;
+  transition: 0.5s ease-in-out;
+}
+.btn-gold:hover {
+  background-image: linear-gradient(#d6bc04, #a76f08);
+  color: #fff;
+}
