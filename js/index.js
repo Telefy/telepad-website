@@ -961,26 +961,26 @@ const initialize = async () => {
 
     $("#tokenCoin").change(async function (event) {
       if (event.target.value) {
-        $("#tokenLable").text(`${event.target.value} Amount`);
+        $("#tokenLable").text(`${event.target.value} Amount *`);
 
         if(event.target.value == "USDC"){
-          $("#minContent").text(`500 ${event.target.value}`);  
+          $("#minContent").text(`50 ${event.target.value}`);  
           $("#maxContent").text(`5000 ${event.target.value}`);  
         } else if(event.target.value == "ETH"){
           
-          $("#minContent").text(`0.2 ${event.target.value}`);  
+          $("#minContent").text(`0.02 ${event.target.value}`);  
           $("#maxContent").text(`2 ${event.target.value}`);
         } else if(event.target.value == "WETH"){
           
-          $("#minContent").text(`0.2 ${event.target.value}`);  
+          $("#minContent").text(`0.02 ${event.target.value}`);  
           $("#maxContent").text(`2 ${event.target.value}`);
         } else if(event.target.value == "BUSD"){
           
-          $("#minContent").text(`500 ${event.target.value}`);  
+          $("#minContent").text(`50 ${event.target.value}`);  
           $("#maxContent").text(`5000 ${event.target.value}`);
         } else if(event.target.value == "BNB"){
           
-          $("#minContent").text(`1 ${event.target.value}`);  
+          $("#minContent").text(`0.1 ${event.target.value}`);  
           $("#maxContent").text(`20 ${event.target.value}`);
         }
         
