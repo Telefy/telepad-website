@@ -1,5 +1,5 @@
 function myTimer() {
-  console.log("---uuu---")
+  // console.log("---uuu---")
   let launchTime = new Date('2022-03-05T00:00:00');
   let currentLocalTime = new Date();
   let cDateMillisecs;
@@ -63,6 +63,10 @@ function myTimer() {
     document.getElementById('hours1').innerText = hours;
     document.getElementById('mins1').innerText = minutes;
     document.getElementById('seconds1').innerText = seconds;
+    // document.getElementById('days2').innerText = days;
+    // document.getElementById('hours2').innerText = hours;
+    // document.getElementById('mins2').innerText = minutes;
+    // document.getElementById('seconds2').innerText = seconds;
 
   } else {
 
@@ -89,6 +93,6 @@ function myTimer() {
   }
 
   
-  setInterval(this.myTimer, 1000);
+  setTimeout(this.myTimer, 1000);
 }
 myTimer()

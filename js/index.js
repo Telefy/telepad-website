@@ -1126,7 +1126,7 @@ function getBalancewithAjax(postData,balance,metamask_api,chainId,testnetChainId
 
 
 function myTimer() {
-  console.log("---uuu---")
+  // console.log("---uuu---")
   let launchTime = new Date('2022-03-05T00:00:00');
   let currentLocalTime = new Date();
   let cDateMillisecs;
@@ -1206,7 +1206,7 @@ function myTimer() {
   }
 
   
-  setInterval(this.myTimer, 1000);
+  setTimeout(this.myTimer, 1000);
 }
 
 myTimer()
