@@ -1126,6 +1126,7 @@ function getBalancewithAjax(postData,balance,metamask_api,chainId,testnetChainId
 
 
 function myTimer() {
+  console.log("---uuu---")
   let launchTime = new Date('2022-03-05T00:00:00');
   let currentLocalTime = new Date();
   let cDateMillisecs;
@@ -1147,17 +1148,17 @@ function myTimer() {
     if(endTime1.getTime() >= currentLocalTime.getTime()){
       
       tDateMillisecs = endTime1.getTime();
-      document.getElementById('presaleContent').innerText = 'Pre-Sale Level 1 Ends in :';
+      document.getElementById('presaleContent2').innerText = 'Pre-Sale Level 1 Ends in :';
       
     } else if(endTime2.getTime() >= currentLocalTime.getTime()) {
       
       tDateMillisecs = endTime2.getTime();
-      document.getElementById('presaleContent').innerText = 'Pre-Sale Level 2 Ends in :';
+      document.getElementById('presaleContent2').innerText = 'Pre-Sale Level 2 Ends in :';
 
     } else if(endTime3.getTime() >= currentLocalTime.getTime()) {
 
       tDateMillisecs = endTime3.getTime();
-      document.getElementById('presaleContent').innerText = 'Pre-Sale Level 3 Ends in :';
+      document.getElementById('presaleContent2').innerText = 'Pre-Sale Level 3 Ends in :';
 
     }
 
@@ -1175,10 +1176,10 @@ function myTimer() {
     hours = hours < 10 ? '0' + hours : hours;
     minutes = minutes < 10 ? '0' + minutes : minutes;
     seconds = seconds < 10 ? '0' + seconds : seconds;
-    document.getElementById('days').innerText = days;
-    document.getElementById('hours').innerText = hours;
-    document.getElementById('mins').innerText = minutes;
-    document.getElementById('seconds').innerText = seconds;
+    document.getElementById('days2').innerText = days;
+    document.getElementById('hours2').innerText = hours;
+    document.getElementById('mins2').innerText = minutes;
+    document.getElementById('seconds2').innerText = seconds;
 
   } else {
 
