@@ -522,7 +522,7 @@ h6 {
   }
   .marker-title {
     top: 25px !important;
-    padding-top: 16px;
+    padding-top: 18px;
     font-size: 10px !important;
   }
   .note-info {
@@ -1989,7 +1989,8 @@ sup {
 }
 
 .ui-slider-range {
-  background: linear-gradient(180deg, #9f19ab 0%, #ff63ce 100%);
+  /* background: linear-gradient(180deg, #9f19ab 0%, #ff63ce 100%); */
+  background: linear-gradient(45deg, #df4ab0 0%, #2f13ac 100%);
   height: 18px;
   position: absolute;
   border-top: 1px solid #a921ae;
@@ -2142,6 +2143,9 @@ sup {
 }
 .marker-title-25 {
   left: 38%;
+}
+.marker-title-50 {
+  left: 50%;
 }
 .marker-50 {
   left: 50%;
