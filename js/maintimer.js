@@ -15,6 +15,7 @@ function myTimer() {
     let endTime1 = new Date('2022-03-20T00:00:00');
     let endTime2 = new Date('2022-04-11T00:00:00');
     let endTime3 = new Date('2022-04-26T23:59:59');
+    let endTime4 = new Date('2022-05-26T23:59:59');
     let estTimNow = new Date(currentLocalTime.toLocaleString('en-US', { timeZone: 'America/New_York' }))
     
 
@@ -37,7 +38,16 @@ function myTimer() {
       tDateMillisecs = endTime3.getTime();
       document.getElementById('presaleContent').innerText = 'Pre-Sale Level 3 Ends in :';
       document.getElementById('presaleContent1').innerText = 'Pre-Sale Level 3 Ends in :';
-      // document.getElementById('presaleContent2').innerText = 'Pre-Sale Level 3 Ends in :';
+      $('.saleButton').html('Enter Pre-Sale to get 50% Discount');
+      $('#noteText').html('*Note: The Pre-sale price above what you see if after 50% discount, which is only applicable for Pre-sale');
+
+    } else if(endTime4.getTime() >= currentLocalTime.getTime()) {
+
+      tDateMillisecs = endTime4.getTime();
+      document.getElementById('presaleContent').innerText = 'Private Sale Ends in :';
+      document.getElementById('presaleContent1').innerText = 'Private Sale Ends in :';
+      $('.saleButton').html('Enter Private Sale to get 50% Discount');
+      $('#noteText').html('*Note: The Private sale price above what you see if after 50% discount, which is only applicable for Private sale');
 
     }
 

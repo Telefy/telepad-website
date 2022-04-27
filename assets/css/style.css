@@ -2259,6 +2259,7 @@ sup {
   font-size: 14px;
   overflow: hidden;
   text-align: center;
+  padding: 10px;
 }
 
 .sale-price-info div p {

@@ -1142,6 +1142,7 @@ function myTimer() {
     let endTime1 = new Date('2022-03-20T00:00:00');
     let endTime2 = new Date('2022-04-11T00:00:00');
     let endTime3 = new Date('2022-04-26T23:59:59');
+    let endTime4 = new Date('2022-05-26T23:59:59');
     let estTimNow = new Date(currentLocalTime.toLocaleString('en-US', { timeZone: 'America/New_York' }))
     
 
@@ -1159,7 +1160,19 @@ function myTimer() {
 
       tDateMillisecs = endTime3.getTime();
       document.getElementById('presaleContent2').innerText = 'Pre-Sale Level 3 Ends in :';
+      $('#titleTag').html('Telefy | Pre-Sale')
+      $('#saleText').html('Pre-Sale')
+      $('#saleText1').html('Fill the below TELE form and participate in Pre-Sale')
+      $('#saleText2').html('Pre-Sale registration to buy the Tele Tokens')
 
+    } else if(endTime4.getTime() >= currentLocalTime.getTime()) {
+
+      tDateMillisecs = endTime4.getTime();
+      document.getElementById('presaleContent2').innerText = 'Private Sale Ends in :';
+      $('#titleTag').html('Telefy | Private Sale')
+      $('#saleText').html('Private Sale')
+      $('#saleText1').html('Fill the below TELE form and participate in Private Sale')
+      $('#saleText2').html('Private Sale registration to buy the Tele Tokens')
     }
 
     cDateMillisecs = estTimNow.getTime();
