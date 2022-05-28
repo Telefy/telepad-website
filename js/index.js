@@ -1142,7 +1142,7 @@ function myTimer() {
     let endTime1 = new Date('2022-03-20T00:00:00');
     let endTime2 = new Date('2022-04-11T00:00:00');
     let endTime3 = new Date('2022-04-26T23:59:59');
-    let endTime4 = new Date('2022-07-16T00:00:00');
+    let endTime4 = new Date('2022-06-16T00:00:00');
     let estTimNow = new Date(currentLocalTime.toLocaleString('en-US', { timeZone: 'America/New_York' }))
     
 
